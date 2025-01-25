@@ -34,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($errores)) {
         try {
             // Crear el objeto Subfamilia
-            $subfamilia = new Subfamilia(null, $id_familia, $nombre, $descripcion, $activo);
+            $subfamilia = new Subfamilia(null, $id_familia, $nombre, $descripcion, 1);
             // Registrar la subfamilia
             if ($gestorSubFamilia->crear_subfamilia($subfamilia)) {
-                $_SESSION['mensaje'][] = "Subfamilia registrada correctamente.";
+                $_SESSION['mensaje'] = "Subfamilia registrada correctamente.";
                 header('Location: mantenimiento_subfamilias.php');
                 exit();
             } else {

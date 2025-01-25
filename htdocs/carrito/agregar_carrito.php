@@ -32,11 +32,12 @@ try {
             } else {
                 $precio_final = $producto['precio'];
             }
-            //Guardar el precio final en la sesión
+            // Guardar el precio final en la sesión
             $_SESSION['precio_final'] = $precio_final;
-            //Verificar si el carrito ya está creado
+            // Verificar si el carrito ya está creado
             $_SESSION['carrito'] ??= [];
-            //Verificar si el producto ya está en el carrito
+
+            // Verificar si el producto ya está en el carrito
             $producto_en_carrito = false;
             foreach ($_SESSION['carrito'] as &$item) {
                 if ($item['codigo'] == $producto['codigo']) {
@@ -45,19 +46,22 @@ try {
                     break;
                 }
             }
+
             // Si no está en el carrito, añadirlo
             if (!$producto_en_carrito) {
                 $_SESSION['carrito'][] = [
                     'codigo' => $producto['codigo'],
                     'nombre' => $producto['nombre'],
                     'descripcion' => $producto['descripcion'],
-                    'imagen' => basename($producto['imagen']),
+                    'imagen' => basename($producto['imagen']),//evita inyeccion de archivos
                     'precio' => $producto['precio'],
                     'cantidad' => $cantidad,
                     'descuento' => isset($producto['descuento']) ? $producto['descuento'] : 0,
                     'precio_final' => $precio_final
                 ];
             }
+
+            // Mensaje de éxito
             $_SESSION['mensaje'][] = "Producto añadido al carrito.";
         } else {
             throw new Exception("El producto no existe.");
@@ -66,6 +70,7 @@ try {
         throw new Exception("Código o cantidad no especificados.");
     }
 } catch (Exception $e) {
+    // Guardar el mensaje de error en la sesión
     $_SESSION['errores'][] = "Error: " . $e->getMessage();
 }
 

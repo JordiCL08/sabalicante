@@ -111,6 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errores[] = "Error al insertar los datos: " . $e->getMessage();
         }
     }
+
     // Almacenar errores en la sesión para mostrarlos
     $_SESSION['errores'] = $errores;
 }

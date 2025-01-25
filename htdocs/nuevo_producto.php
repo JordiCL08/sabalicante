@@ -82,14 +82,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //Crear producto
             $producto = new Producto($codigo, $nombre, $descripcion, $subfamilia, $precio, $nombre_imagen_bd, $descuento, 1, $stock);
             if ($gestorProductos->crear_producto($producto)) {
-                $_SESSION['mensaje'][] = "Producto registrado correctamente.";
+                $_SESSION['mensaje'] = "Producto registrado correctamente.";
                 header('Location: mantenimiento_productos.php');
                 exit();
             } else {
-                $_SESSION['errores'][]  = "Error al dar de alta el producto.";
+                $errores[]  = "Error al dar de alta el producto.";
             }
         } catch (PDOException $e) {
-            $_SESSION['errores'][]  = "Error al insertar los datos: " . $e->getMessage();
+            $errores[]  = "Error al insertar los datos: " . $e->getMessage();
         }
     }
 

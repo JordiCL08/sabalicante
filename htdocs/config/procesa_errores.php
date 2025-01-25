@@ -1,24 +1,21 @@
 <?php
 ////////////////////MENSAJES O ERRORES//////////////////////////////////
 
-if (isset($_SESSION['errores']) && count($_SESSION['errores']) > 0) {
+if (isset($_SESSION['errores']) && is_array($_SESSION['errores']) && count($_SESSION['errores']) > 0) {
     echo '<ul class="alert alert-danger mensajes-internos">';
     foreach ($_SESSION['errores'] as $error) {
         echo "<li>{$error}</li>";
     }
     echo '</ul>';
-    // Limpiar los errores después de mostrarlos
     unset($_SESSION['errores']);
 }
 
-
-if (isset($_SESSION['mensaje']) && count($_SESSION['mensaje']) > 0) {
+if (isset($_SESSION['mensaje']) && is_array($_SESSION['mensaje']) && count($_SESSION['mensaje']) > 0) {
     echo '<ul class="alert alert-success mensajes-internos">';
     foreach ($_SESSION['mensaje'] as $mensaje) {
         echo "<li>{$mensaje}</li>";
     }
     echo '</ul>';
-    // Limpiar los errores después de mostrarlos
     unset($_SESSION['mensaje']);
 }
 

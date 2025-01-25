@@ -67,30 +67,35 @@ class GestorFamilias
     public function mostrar_familias($buscar_familia = '', $ordenar = 'ASC')
     {
         try {
+            // Validar que el parámetro 'ordenar' sea válido
             if (!in_array(strtoupper($ordenar), ['ASC', 'DESC'])) {
                 throw new Exception('Orden no válido');
             }
-            //Nº de registros por pagina
+
+            // Definir el número de registros por página
             $registros = 10;
 
-            //Nº de pagina actual
+            // Obtener el número de página actual
             $pagina = isset($_GET["pagina"]) && is_numeric($_GET["pagina"]) && $_GET["pagina"] > 0 ? (int)$_GET["pagina"] : 1;
             $inicio = ($pagina - 1) * $registros;
+
+            // Crear la consulta base con el filtro de búsqueda (si existe)
             $query = "SELECT COUNT(*) FROM familias WHERE nombre LIKE :buscar_familia";
             $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(':buscar_familia', '%' . $buscar_familia . '%');//por si hay algún filtro
+            $stmt->bindValue(':buscar_familia', '%' . $buscar_familia . '%');
             $stmt->execute();
             $num_total_registros = $stmt->fetchColumn();
             $total_paginas = ceil($num_total_registros / $registros);
 
-            //Consulta con filtro y orden
+            // Consulta para obtener las familias con el filtro de búsqueda y orden
             $query = "SELECT * FROM familias WHERE nombre LIKE :buscar_familia ORDER BY nombre $ordenar LIMIT :inicio, :registros";
             $stmt = $this->pdo->prepare($query);
             $stmt->bindValue(':buscar_familia', '%' . $buscar_familia . '%');
             $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
             $stmt->bindValue(':registros', $registros, PDO::PARAM_INT);
             $stmt->execute();
-            //metemos las familias en un array
+
+            // Obtener las familias
             $familias = [];
             $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
             foreach ($resultado as $familia) {
@@ -101,6 +106,8 @@ class GestorFamilias
                     $familia->activo
                 );
             }
+
+            // Devolver los productos y la cantidad total de páginas
             return [$familias, $total_paginas];
         } catch (PDOException $e) {
             throw new Exception('Error al obtener productos: ' . $e->getMessage());
@@ -111,6 +118,7 @@ class GestorFamilias
     // Borrar una familia por id
     public function borrar_familia($id_familia)
     {
+        // Eliminar la familia de la base de datos
         $query = "DELETE FROM familias WHERE id_familia = :id_familia";
         try {
             $stmt = $this->pdo->prepare($query);
@@ -125,7 +133,7 @@ class GestorFamilias
         }
     }
 
-    //Crear una nueva familia
+    // Crear una nueva familia
     public function crear_familia(Familia $familia)
     {
         $query = "INSERT INTO familias (nombre, descripcion, activo)

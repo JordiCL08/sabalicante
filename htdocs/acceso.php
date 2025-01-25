@@ -35,7 +35,7 @@ if (isset($_POST["entrar"])) {
             if ($resultado) {
                 // Verificar si la cuenta está activa
                 if (isset($resultado['activo']) && $resultado['activo'] === 0) {
-                    $errores[] = "El usuario está desactivado, ponte en contacto con admin@sabalicante.es.";
+                    $alerta_usuario_desactivado = "El usuario está desactivado, ponte en contacto con admin@sabalicante.com.";
                 } else {
                     // Verificar la contraseña
                     if (password_verify($clave, $resultado['clave'])) {
@@ -76,7 +76,16 @@ if (isset($_POST["entrar"])) {
 
         <!-- Contenido principal -->
         <main class="col-md-9 col-lg-10 p-4 bg-light">
-            <?php include_once "config/procesa_errores.php"; ?>
+
+            <?php
+            include_once "config/procesa_errores.php"; //Errores sesiones
+            //Error usuario fuera de la sesion por estar desactivado
+            if (isset($alerta_usuario_desactivado)) {
+                echo '<ul class="alert alert-danger">';
+                echo '<li>' . htmlspecialchars($alerta_usuario_desactivado) . '</li>';
+                echo '</ul>';
+            }
+            ?>
             <div class="container d-flex justify-content-center align-items-center">
                 <div class="col-12 col-md-8 col-lg-6">
                     <div class="card shadow-lg p-4 border-0 rounded-3">

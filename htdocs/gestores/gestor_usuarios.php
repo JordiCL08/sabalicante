@@ -162,7 +162,7 @@ class GestorUsuarios
             $pagina = isset($_GET["pagina"]) && is_numeric($_GET["pagina"]) && $_GET["pagina"] > 0 ? (int)$_GET["pagina"] : 1;
             $inicio = ($pagina - 1) * $registros;
 
-            //Si hay un valor de búsqueda, añadimos el WHERE
+            // Si hay un valor de búsqueda, añadimos el WHERE
             if (!empty($buscar)) {
                 $query = "SELECT * FROM usuarios WHERE dni LIKE :buscar ORDER BY nombre $ordenar LIMIT :inicio, :registros";
                 $stmt = $this->pdo->prepare($query);

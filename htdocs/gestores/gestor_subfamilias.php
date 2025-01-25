@@ -59,10 +59,14 @@ class GestorSubFamilias
     public function mostrar_subfamilias($buscar_subfamilia = '', $ordenar = 'ASC')
     {
         try {
+            // Validar que el parámetro 'ordenar' sea válido
             if (!in_array(strtoupper($ordenar), ['ASC', 'DESC'])) {
                 throw new Exception('Orden no válido');
             }
+
+            // Definir el número de registros por página
             $registros = 10;
+
             // Obtener el número de página actual
             $pagina = isset($_GET["pagina"]) && is_numeric($_GET["pagina"]) && $_GET["pagina"] > 0 ? (int)$_GET["pagina"] : 1;
             $inicio = ($pagina - 1) * $registros;

@@ -46,9 +46,9 @@ list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, 
                     <th>Código</th>
                     <th>Nombre
                         <?php if ($rol === 'Administrador'): ?>
-                            <a href="mantenimiento_productos.php?ordenar=ASC&buscar=<?php echo urlencode($buscar_producto); ?>"
+                            <a href="mantenimiento_productos.php?ordenar=ASC&buscar=<?php echo urlencode($buscar); ?>"
                                 class="text-decoration-none" aria-label="Ordenar ascendentemente">⬆️</a>
-                            <a href="mantenimiento_productos.php?ordenar=DESC&buscar=<?php echo urlencode($buscar_producto); ?>"
+                            <a href="mantenimiento_productos.php?ordenar=DESC&buscar=<?php echo urlencode($buscar); ?>"
                                 class="text-decoration-none" aria-label="Ordenar descendentemente">⬇️</a>
                         <?php endif; ?>
                     </th>
@@ -75,7 +75,7 @@ list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, 
                             <td><?php echo htmlspecialchars($gestorProductos->obtener_subfamilias($producto->getCodigo())['subfamilia_nombre'] ?? "Sin subfamilia"); ?></td>
                             <td><?php echo number_format($producto->getPrecio(), 2); ?> €</td>
                             <td>
-                                <?php if ($producto->getImagen()): ?>
+                                <?php if (htmlspecialchars($producto->getImagen())): ?>
                                     <img src="<?php echo "imagenes/" . htmlspecialchars($producto->getImagen()); ?>"
                                         alt="Imagen de <?php echo htmlspecialchars($producto->getNombre()); ?>"
                                         style="width: 60px; height: auto;">
@@ -110,12 +110,12 @@ list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, 
     </div>
 
     <!-- Paginación -->
-    <?php if (empty($buscar_producto) && $total_paginas > 1): ?>
+    <?php if (empty($buscar) && $total_paginas > 1): ?>
         <nav>
             <ul class="pagination justify-content-center">
                 <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
                     <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?pagina=<?php echo $i; ?>&buscar_producto=<?php echo urlencode($buscar_producto); ?>">
+                        <a class="page-link" href="?pagina=<?php echo $i; ?>&buscar=<?php echo urlencode($buscar); ?>">
                             <?php echo $i; ?>
                         </a>
                     </li>

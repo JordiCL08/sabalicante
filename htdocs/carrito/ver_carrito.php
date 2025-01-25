@@ -98,6 +98,7 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
         input.addEventListener('change', function() {
             var codigo = this.getAttribute('data-codigo');
             var cantidad = this.value;
+
             //Enviar la nueva cantidad al servidor 
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'carrito.php', true);

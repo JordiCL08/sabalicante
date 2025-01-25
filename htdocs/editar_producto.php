@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
     $descripcion = trim($_POST['descripcion']);
     $subfamilia = trim($_POST['id_subfamilia']);
     $precio = trim($_POST['precio']);
-    $imagen = $producto['imagen'];
+    $imagen = isset($producto['imagen']) ? $producto['imagen'] : '';    
     /**IMAGEN ********************************/
     // Verificar si se sube una nueva imagen
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
             // Intentar editar el producto
             $resultado = $gestorProductos->editar_producto($producto);
             if ($resultado) {
-                $_SESSION['mensaje'][] = "Producto editado correctamente.";
+                $_SESSION['mensaje'] = "Producto editado correctamente.";
                 header('Location: mantenimiento_productos.php');
                 exit();
             }

@@ -5,7 +5,7 @@ include_once 'config/conectar_db.php';
 session_start();
 
 // Verifica si el usuario está logueado
-if (!isset($_SESSION['usuario']) || !isset($_SESSION['rol'])) {
+if (!isset($_SESSION['acceso']) ) {
     header("Location: index.php");
     exit;
 }
@@ -39,11 +39,10 @@ if (isset($_GET['id'])) {
 } else {
     $errores[] = "ID de usuario no proporcionado.";
 }
-//PROCESAR FORMULARIO PARA EDITAR EL USUARIO
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_usuario'])) {
-    if (!$usuario) {
-        $errores[] = "Usuario no encontrado.";
-    } else {
+//PROCESAR FORMULARIO PARA EDITAR EL USUARIO O DARLO DE BAJA
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //EDITAR USUARIO
+    if (isset($_POST['editar_usuario'])) {
         $id = trim($_POST['id']);
         $dni = trim($_POST['dni']);
         $nombre = trim($_POST['nombre']);
@@ -107,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_usuario'])) {
             try {
                 $resultado = $gestorUsuario->editar_usuario($usuario);
                 if ($resultado) {
-                    $_SESSION['mensaje'][] = "El usuario ha sido editado.";
+                    $_SESSION['mensaje'] = "El usuario ha sido editado.";
                     if ($_SESSION['rol'] === 'Administrador') {
                         header('Location: mantenimiento_usuarios.php');
                         exit();
@@ -122,24 +121,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_usuario'])) {
         }
         $_SESSION['errores'] = $errores;
     }
-}
-//PROCESAR BAJA
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dar_baja'])) {
-    try {
-        //Actualiza el estado de la cuenta a inactiva 
-        $gestorUsuario->baja_usuario($id);
-
-        $_SESSION['mensaje'] = "Tu cuenta ha sido dada de baja.";
-        header('Location: index.php');
-        include_once 'config/logout.php';
-        exit();
-    } catch (PDOException $e) {
-        $errores[] = "Error al dar de baja la cuenta: " . $e->getMessage();
+    //Baja usuario
+    if (isset($_POST['dar_baja'])) {
+        if ($usuario) {
+            if ($rol_sesion === 'Administrador' && $usuario->getId() == $id_usuario) {
+                $errores[] = "No puedes desactivar tu propia cuenta como administrador.";
+            } else {
+                try {
+                    $usuario->setActivo(false);
+                    $resultado = $gestorUsuario->editar_usuario($usuario);
+                    if ($resultado) {
+                    include_once 'config/logout.php';
+                    exit();
+                    }
+                } catch (PDOException $e) {
+                    $errores[] = "Error al procesar la baja: " . $e->getMessage();
+                }
+            }
+        } else {
+            $errores[] = "Usuario no encontrado.";
+        }
+        $_SESSION['errores'] = $errores;
     }
 }
-
-
-
 ?>
 
 <?php include_once "includes/header.php"; ?>
@@ -236,9 +240,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['dar_baja'])) {
                         </div>
                         <!-- Activar/Desactivar Cuenta -->
                         <?php if ($rol_sesion === 'Usuario') : ?>
-                            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                                 <button type="submit" class="btn btn-danger" name="dar_baja" onclick="return confirm('¿Estás seguro de que quieres dar de baja tu cuenta?')">Dar de baja</button>
-                            </form>
                         <?php elseif ($rol_sesion !== 'Usuario'): ?>
                             <div class="form-check form-switch mt-4">
                                 <!-- Checkbox como interruptor -->

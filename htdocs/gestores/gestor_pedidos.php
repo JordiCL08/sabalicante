@@ -74,17 +74,22 @@ class GestorPedidos
     public function agregar_linea_pedido($pedido_id, $carrito)
     {
         foreach ($carrito as $item) {
+
             $gestorProducto = new GestorProductos($this->pdo);
+            // Obtener los detalles del producto (incluyendo descuento)
             $producto = $gestorProducto->obtener_producto_codigo($item['codigo']);
-            //Verificar si el producto existe y tiene descuento
+
+            // Verificar si el producto existe y tiene descuento
             if ($producto) {
-                //Si hay un descuento, aplicarlo
+                // Si hay un descuento, aplicarlo
                 $precioConDescuento = $producto->getPrecio();
                 if ($producto->getDescuento() > 0) {
                     $precioConDescuento = $precioConDescuento * (1 - ($producto->getDescuento() / 100)); // Aplica el descuento al precio
                 }
+
                 // Calcular el subtotal con el precio con descuento
                 $subtotal = $precioConDescuento * $item['cantidad'];
+
                 // Insertar la línea en la base de datos con el precio con descuento
                 $query = "INSERT INTO lineas_pedido (id_pedido, codigo_producto, cantidad, precio_unitario, subtotal) 
                       VALUES (:pedido_id, :codigo_producto, :cantidad, :precio_unitario, :subtotal)";
@@ -96,6 +101,7 @@ class GestorPedidos
                 $stmt->bindParam(':subtotal', $subtotal);
                 $stmt->execute();
             } else {
+                // Si no se encuentra el producto, manejar el error (opcional)
                 throw new Exception("Producto no encontrado: " . $item['codigo']);
             }
         }
@@ -128,9 +134,12 @@ class GestorPedidos
         $stmt->execute();
         // Obtener todos los pedidos
         $pedidos = $stmt->fetchAll(PDO::FETCH_OBJ);
-        $total_registros = count($pedidos);//nº de pedidos
-        $registros_por_pagina = 10;//nº de registros por página 
-        $total_paginas = ceil($total_registros / $registros_por_pagina);//total de páginas
+        // Calcular el total de páginas (por ejemplo, asumiendo 10 resultados por página)
+        $total_registros = count($pedidos);
+        $registros_por_pagina = 10;
+        $total_paginas = ceil($total_registros / $registros_por_pagina);
+
+        // Devolver los pedidos y el total de páginas
         return [$pedidos, $total_paginas];
     }
 

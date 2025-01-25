@@ -34,12 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resultado = $stmt->execute();
 
             if ($resultado) {
+                // Si la actualización fue exitosa, mostramos un mensaje y cerramos sesión
                 $_SESSION['mensaje'][] = "Contraseña cambiada con éxito.";
                 session_unset();
                 session_destroy();
                 header("Location: index.php");
                 exit();
             } else {
+                // Si hubo un problema con la consulta
                 $_SESSION['errores'][] = "Error al cambiar la contraseña.";
             }
         } catch (PDOException $e) {

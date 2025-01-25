@@ -20,38 +20,39 @@
                                 <img src="<?php echo "imagenes/" . htmlspecialchars($producto->getImagen()); ?>"
                                     class="card-img-top rounded-top"
                                     alt="Imagen de <?php echo htmlspecialchars($producto->getNombre()); ?>"
-                                    style="object-fit: cover; height: 200px;"
-                                    loading="lazy">
+                                    style="object-fit: cover; height: 150px;" loading="lazy">
                             <?php else: ?>
-                                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
                                     <span class="text-muted">Sin imagen</span>
                                 </div>
                             <?php endif; ?>
-                            <div class="card-body bg-light text-dark">
-                                <h5 class="card-title mb-2 text-truncate" style="max-width: 200px;"><?php echo htmlspecialchars($producto->getNombre()); ?></h5>
+                            <div class="card-body bg-light text-dark d-flex flex-column">
+                                <h5 class="card-title mb-2"><?php echo htmlspecialchars($producto->getNombre()); ?></h5>
+                                <p class="card-text mb-2"><?php echo htmlspecialchars($producto->getDescripcion()); ?></p>
 
-                                <?php
-                                //Mostrar el precio con descuento si existe
-                                $precio = $producto->getPrecio();
-                                $descuento = $producto->getDescuento(); //Porcentaje de descuento
-                                $precio_con_descuento = $descuento ? $precio * (1 - $descuento / 100) : $precio;
-                                ?>
+                                <div class="mt-auto">
+                                    <?php
+                                    // Mostrar el precio con descuento si existe
+                                    $precio = $producto->getPrecio();
+                                    $descuento = $producto->getDescuento(); // Porcentaje de descuento
+                                    $precio_con_descuento = $descuento ? $precio * (1 - $descuento / 100) : $precio;
+                                    ?>
 
-                                <p class="card-text mb-1">
-                                    <?php if ($descuento): ?>
-                                        <small class="text-muted text-decoration-line-through"><?php echo number_format($precio, 2, ',', '.') . " €"; ?></small>
+                                    <p class="card-text mb-1">
+                                        <?php if ($descuento): ?>
+                                            <small class="text-muted text-decoration-line-through"><?php echo number_format($precio, 2, ',', '.') . " €"; ?></small>
+                                        <?php endif; ?>
+                                        <strong><?php echo number_format($precio_con_descuento, 2, ',', '.') . " €"; ?></strong>
+                                    </p>
+                                    <?php if (($producto->getStock()) <= 0): ?>
+                                        <p class="card-text mt-2"><span class="badge bg-danger">Sin stock</span></p>
                                     <?php endif; ?>
-                                    <medium><?php echo number_format($precio_con_descuento, 2, ',', '.') . " €"; ?></medium>
-                                </p>
-
-                                <form action="carrito/agregar_carrito.php?<?php echo $_SERVER['QUERY_STRING']; ?>" method="POST">
-                                    <input type="hidden" name="codigo" value="<?php echo $producto->getCodigo(); ?>">
-                                    <input type="hidden" name="cantidad" value="1">
-                                    <button type="submit" class="btn btn-sm btn-success w-100 mt-2">Añadir al carrito</button>
-                                </form>
-                                <?php if (($producto->getStock()) <= 0): ?>
-                                    <p class="card-text mt-2"><span class="badge bg-danger">Sin stock</span></p>
-                                <?php endif; ?>
+                                    <form action="carrito/agregar_carrito.php?<?php echo $_SERVER['QUERY_STRING']; ?>" method="POST">
+                                        <input type="hidden" name="codigo" value="<?php echo $producto->getCodigo(); ?>">
+                                        <input type="hidden" name="cantidad" value="1">
+                                        <button type="submit" class="btn btn-sm btn-success w-100 mt-2">Añadir al carrito</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,7 +67,9 @@
                 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                 $parametros_paginacion = http_build_query([
                     'buscar_producto' => $buscar_producto,
-                    'ordenar' => $ordenar
+                    'ordenar' => $ordenar,
+                    'familia' => $familia,
+                    'subfamilia' => $subfamilia
                 ]);
                 ?>
 
@@ -99,6 +102,4 @@
     <?php else: ?>
         <p class="text-center text-muted">No se encontraron artículos.</p>
     <?php endif; ?>
-
 </div>
-

@@ -6,7 +6,7 @@ include_once '../gestores/gestor_pedidos.php';
 $pdo = conectar_db();
 $gestorPedido = new GestorPedidos($pdo);
 
-//Regenerar el ID de la sesión para mayor seguridad
+// Regenerar el ID de la sesión para mayor seguridad
 session_regenerate_id();
 
 if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
@@ -25,17 +25,19 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
     // Iniciar la transacción
     $pdo->beginTransaction();
     try {
-        //Añadimos el pedido
+        // Añadimos el pedido
         $pedido_id = $gestorPedido->agregar_pedido($_SESSION['id'], $total, $forma_pago);
-        //Añadimos las líneas del pedido
+
+        // Añadimos las líneas del pedido
         $gestorPedido->agregar_linea_pedido($pedido_id, $_SESSION['carrito']);
-        //Verificar y descontar stock
+
+        // Verificar y descontar stock
         foreach ($_SESSION['carrito'] as $item) {
             $stock = $gestorPedido->stock_actual($item['codigo']);
             if ($gestorPedido->verificar_stock($item['codigo'], $item['cantidad'])) {
                 $gestorPedido->descontar_stock($item['codigo'], $item['cantidad']);
             } else {
-                //Si el stock no es suficiente, revertir la transacción 
+                // Si el stock no es suficiente, revertir la transacción 
                 $pdo->rollBack();
                 $stock_actual = $stock['stock'];
                 $_SESSION['errores'][] = "No hay suficiente stock del producto " . $item['nombre'] . ". El Stock actual es de: " . $stock_actual;
@@ -43,11 +45,14 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
                 exit();
             }
         }
+
         // Confirmar la transacción
         $pdo->commit();
         $_SESSION['fecha_pedido'] = $fecha_pedido;
         $_SESSION['id_pedido'] = $pedido_id;
         unset($_SESSION['carrito']);  // Limpiar el carrito
+
+        //Redirigir a la página de confirmación del pedido
         header("Location: ../pedido_confirmado.php");
     } catch (Exception $e) {
         $pdo->rollBack();
