@@ -1,0 +1,2 @@
+php_value date.timezone Europe/Madrid
+php_value display_errors Off

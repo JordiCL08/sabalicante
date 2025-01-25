@@ -1,0 +1,178 @@
+[if0_37973440] [2024-12-23 15:46:03] [pid 8583] [software] Ajax HTTPS Check : https://sabalicante.wuaze.com | Result : false
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] Software Details : array (
+  'name' => 'Bootstrap',
+  'softname' => 'bootstrap',
+  'desc' => 'Bootstrap Sleek, intuitive, and powerful front-end framework for faster and easier web development.',
+  'ins' => 1,
+  'cat' => 'frameworks',
+  'type' => 'php',
+  'ver' => '5.3.3',
+  'pre_down' => 1,
+  'path' => '/var/softaculous/bootstrap',
+  'has_theme' => 0,
+  'update_plugins' => 0,
+  'update_themes' => 0,
+  'verify_dom' => 0,
+  'has_minor' => 0,
+  'idn_dir' => 0,
+  'spacereq' => '8692820',
+  'branch' => 
+  array (
+    426 => 
+    array (
+      'min' => '',
+      'ver' => '5.3.3',
+    ),
+  ),
+  'adminurl' => false,
+)
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] Software Settings : array (
+  'hidden' => 
+  array (
+    'dummy' => 
+    array (
+      'tag' => '<input type="hidden" name="dummy" id="dummy" value="">',
+      'head' => NULL,
+      'exp' => NULL,
+      'handle' => NULL,
+      'optional' => NULL,
+      'quick_install' => NULL,
+      'minlen' => NULL,
+    ),
+  ),
+)
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] Software Info : array (
+  'overview' => '<img src="logo.gif" style="float:right; margin:10px" alt="" /><font size="5" color="#182e7a">Bootstrap</font> Sleek, intuitive, and powerful front-end framework for faster and easier web development.
+		<br /><br />
+		Bootstrap was made to not only look and behave great in the latest desktop browsers (as well as IE7!), but in tablet and smartphone browsers via responsive CSS as well.
+		<br /><br />
+		Bootstrap is released under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>.',
+  'install' => '',
+  'features' => '<ul>
+		  <li>A 12-column responsive grid</li>
+		  <li>Dozens of components</li>
+		  <li>JavaScript plugins</li>
+		  <li>Typography, form controls</li>
+		  <li>A web-based Customizer to make Bootstrap your own</li>
+		</ul>',
+  'demo' => 'http://www.softaculous.com/demos/Bootstrap',
+  'ratings' => 'http://www.softaculous.com/softwares/frameworks/Bootstrap',
+  'support' => 'http://getbootstrap.com/getting-started/',
+  'release_date' => '20-02-2024',
+  'mod' => '47',
+  'mod_files' => '1',
+)
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] Finished calling pre install hooks
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] Task Key : XuVc8heOpaCJwxzzea01hPwfZO66HsVU
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] http://sabalicante.wuaze.com Processed Posted Settings : array (
+  'adminurl' => false,
+  'softdomain' => 'sabalicante.wuaze.com',
+  'softdirectory' => '',
+  'softpath' => '/home/vol18_2/infinityfree.com/if0_37973440/htdocs',
+  'softurl' => 'http://sabalicante.wuaze.com',
+  'dummy' => '',
+)
+
+[if0_37973440] [2024-12-23 15:46:58] [pid 9062] [software] http://sabalicante.wuaze.com Finished loading __post_settings
+
+[if0_37973440] [2024-12-23 15:47:00] [pid 9083] [software] Ajax HTTPS Check : https://sabalicante.wuaze.com | Result : false
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] Software Details : array (
+  'name' => 'Bootstrap',
+  'softname' => 'bootstrap',
+  'desc' => 'Bootstrap Sleek, intuitive, and powerful front-end framework for faster and easier web development.',
+  'ins' => 1,
+  'cat' => 'frameworks',
+  'type' => 'php',
+  'ver' => '5.3.3',
+  'pre_down' => 1,
+  'path' => '/var/softaculous/bootstrap',
+  'has_theme' => 0,
+  'update_plugins' => 0,
+  'update_themes' => 0,
+  'verify_dom' => 0,
+  'has_minor' => 0,
+  'idn_dir' => 0,
+  'spacereq' => '8692820',
+  'branch' => 
+  array (
+    426 => 
+    array (
+      'min' => '',
+      'ver' => '5.3.3',
+    ),
+  ),
+  'adminurl' => false,
+)
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] Software Settings : array (
+  'hidden' => 
+  array (
+    'dummy' => 
+    array (
+      'tag' => '<input type="hidden" name="dummy" id="dummy" value="">',
+      'head' => NULL,
+      'exp' => NULL,
+      'handle' => NULL,
+      'optional' => NULL,
+      'quick_install' => NULL,
+      'minlen' => NULL,
+    ),
+  ),
+)
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] Software Info : array (
+  'overview' => '<img src="logo.gif" style="float:right; margin:10px" alt="" /><font size="5" color="#182e7a">Bootstrap</font> Sleek, intuitive, and powerful front-end framework for faster and easier web development.
+		<br /><br />
+		Bootstrap was made to not only look and behave great in the latest desktop browsers (as well as IE7!), but in tablet and smartphone browsers via responsive CSS as well.
+		<br /><br />
+		Bootstrap is released under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>.',
+  'install' => '',
+  'features' => '<ul>
+		  <li>A 12-column responsive grid</li>
+		  <li>Dozens of components</li>
+		  <li>JavaScript plugins</li>
+		  <li>Typography, form controls</li>
+		  <li>A web-based Customizer to make Bootstrap your own</li>
+		</ul>',
+  'demo' => 'http://www.softaculous.com/demos/Bootstrap',
+  'ratings' => 'http://www.softaculous.com/softwares/frameworks/Bootstrap',
+  'support' => 'http://getbootstrap.com/getting-started/',
+  'release_date' => '20-02-2024',
+  'mod' => '47',
+  'mod_files' => '1',
+)
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] Finished calling pre install hooks
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] Task Key : XuVc8heOpaCJwxzzea01hPwfZO66HsVU
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Processed Posted Settings : array (
+  'adminurl' => false,
+  'softdomain' => 'sabalicante.wuaze.com',
+  'softdirectory' => '',
+  'softpath' => '/home/vol18_2/infinityfree.com/if0_37973440/htdocs',
+  'softurl' => 'http://sabalicante.wuaze.com',
+  'dummy' => '',
+)
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Finished loading __post_settings
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Completed Requirement Checks
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Unzipped Package successfully
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Calling Software installer
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Finished Software installer
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Saving installation details
+
+[if0_37973440] [2024-12-23 15:47:11] [pid 9173] [software] http://sabalicante.wuaze.com Finished Install
+

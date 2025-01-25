@@ -1,0 +1,119 @@
+/* Estilo global */
+body {
+    font-family: 'Roboto', sans-serif; /* Tipografía más ligera */
+    background-color: #f8f9fa; /* Fondo suave para todo el cuerpo */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 100% de la altura de la ventana */
+    margin: 0; /* Elimina el margen por defecto del body */
+}
+
+
+
+/* Estilo del header */
+header {
+    background-color: #c3ced8; /* Fondo más claro (gris suave) */
+    color: #495057; /* Color de texto oscuro pero suave */
+    position: relative; /* Necesario para la línea inferior */
+}
+
+header .navbar {
+    padding: 0.5rem 1rem; /* Menos padding para que no se vea tan pesado */
+}
+
+header .navbar-nav .nav-link {
+    font-weight: 500; /* Peso de fuente medio para los enlaces */
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+header .navbar-nav .nav-link:hover {
+    color: #007bff; /* Azul suave en hover */
+}
+
+header .navbar-nav .nav-link.active {
+    color: #007bff; /* Color azul para el enlace activo */
+}
+
+
+/* Estilo para la imagen del logo */
+.logo-navbar {
+    width: 120px; /* Ajusta el tamaño del logo (más pequeño) */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+/* Estilo para la línea en la parte inferior del header */
+._linea-inf {
+    width: 100%;
+    height: 2px; /* Línea más delgada */
+    background-color: #6a0ea7; 
+    margin-top: 10px; /* Pequeña separación del contenido superior */
+}
+
+._linea-sup {
+    width: 100%;
+    height: 2px; /* Línea más delgada */
+    background-color: #6a0ea7; 
+    margin-bottom: 5px; /* Pequeña separación del contenido superior */
+}
+
+
+/* Estilo para el contenido principal */
+.productos-grid {
+    padding: 1.5rem; /* Agrega espacio alrededor de las tarjetas */
+}
+
+/* Estilo para las tarjetas de productos */
+.productos-grid .card {
+    border: 1px solid #ddd; /* Borde suave para destacar las tarjetas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para un efecto más elegante */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Efectos suaves para el hover */
+}
+
+.productos-grid .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Más sombra al pasar el mouse */
+    transform: translateY(-3px); /* Ligero efecto de elevación */
+}
+
+/* Estilo para el buscador */
+form .form-control {
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: none; /* Sin sombra */
+}
+
+form button {
+    border-radius: 20px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado más suave */
+}
+
+form button:hover {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+/* Estilo para el footer */
+footer {
+    background-color: #343a40; /* Color de fondo del footer */
+    color: #fff; /* Texto blanco */
+    text-align: center; /* Centrado de texto */
+    padding: 1rem 0; /* Padding alrededor del contenido */
+    margin-top: auto; /* Asegura que el footer se mantenga al final */
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9rem; /* Tamaño de la fuente */
+    font-family: Arial, sans-serif; /* Fuentes adecuadas */
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline; /* Subraya el enlace cuando pasa el ratón */
+}
+
+
