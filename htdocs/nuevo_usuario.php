@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultado = $gestorUsuarios->crear_usuario($usuario);
 
             if ($resultado) {
-                $_SESSION['mensaje'][] = "Registro creado correctamente.";
+                $_SESSION['mensaje'] = "Registro creado correctamente.";
                 header('Location: index.php');
                 exit();
             } else {

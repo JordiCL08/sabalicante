@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
         $borrar_usuario = $gestorUsuarios->borrar_usuario($usuario->getId());
         $usuario_DNI = $usuario->getDni();
         if ($borrar_usuario) {
-            $_SESSION['mensaje'][] = "Usuario con DNI:  $usuario_DNI eliminado correctamente.";
+            $_SESSION['mensaje'] = "Usuario con DNI:  $usuario_DNI eliminado correctamente.";
         } else {
             $_SESSION['errores'][] = "Error al eliminar el usuario con DNI:  $usuario_DNI.";
         }

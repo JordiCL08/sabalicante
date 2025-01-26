@@ -13,7 +13,7 @@ if ($dni === null) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nueva_clave = trim($_POST['nueva_clave']);
     $confirmar_nueva_clave = trim($_POST['confirmar_nueva_clave']);
-    
+
 
     // Validar que las contraseñas coincidan
     if ($nueva_clave !== $confirmar_nueva_clave) {
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($resultado) {
                 // Si la actualización fue exitosa, mostramos un mensaje y cerramos sesión
-                $_SESSION['mensaje'][] = "Contraseña cambiada con éxito.";
+                $_SESSION['mensaje'] = "Contraseña cambiada con éxito.";
                 session_unset();
                 session_destroy();
                 header("Location: index.php");

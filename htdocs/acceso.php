@@ -45,7 +45,8 @@ if (isset($_POST["entrar"])) {
                         $_SESSION['id'] = $resultado['id'];
                         $_SESSION['rol'] = $resultado['rol'];
                         $_SESSION['nombre'] = $resultado['nombre'];
-
+                        //mensaje bienvenida
+                        $_SESSION['mensaje'] = "Bienvendi@ ". $_SESSION['nombre'];
                         // Redirigir al usuario a la página principal
                         header("Location: index.php");
                         exit;

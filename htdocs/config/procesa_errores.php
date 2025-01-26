@@ -10,14 +10,13 @@ if (isset($_SESSION['errores']) && is_array($_SESSION['errores']) && count($_SES
     unset($_SESSION['errores']);
 }
 
-if (isset($_SESSION['mensaje']) && is_array($_SESSION['mensaje']) && count($_SESSION['mensaje']) > 0) {
-    echo '<ul class="alert alert-success mensajes-internos">';
-    foreach ($_SESSION['mensaje'] as $mensaje) {
-        echo "<li>{$mensaje}</li>";
-    }
-    echo '</ul>';
+if (isset($_SESSION['mensaje'])) {
+    echo '<div class="alert alert-success mensajes-internos">';
+    echo $_SESSION['mensaje'];
+    echo '</div>';
     unset($_SESSION['mensaje']);
 }
+
 
 ////////////////////////////////////////////////////////////////////
 

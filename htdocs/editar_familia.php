@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_familia'])) {
             $familia = new Familia($id_familia, $nombre, $descripcion, $activo);
             $resultado = $gestorFamilia->editar_familia($familia);
             if ($resultado) {
-                $_SESSION['mensaje'][]= "Familia editada correctamente.";
+                $_SESSION['mensaje'] = "Familia editada correctamente.";
                 header('Location: mantenimiento_familias.php');
                 exit();
             }

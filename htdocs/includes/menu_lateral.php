@@ -1,4 +1,3 @@
-<p class="text-center mb-4 fs-1 text-white">Menú</p>
 <div class="accordion accordion-flush" id="accordionFamilias">
   <?php
   //Obtener las familias activas
@@ -16,7 +15,7 @@
       <!-- Cabecera de la familia -->
       <h3 class="accordion-header" id="<?= $idCabecera ?>">
         <button
-          class="accordion-button collapsed bg-secondary text-white fs-3"
+          class="accordion-button collapsed bg-secondary text-white fs-4"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#<?= $idAcordeon ?>"

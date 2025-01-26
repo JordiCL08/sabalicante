@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_subfamilia'])) 
         try {
             $resultado = $gestorSubFamilia->editar_subfamilia($subfamilia);
             if ($resultado) {
-                $_SESSION['mensaje'][] = "Subfamilia editada correctamente.";
+                $_SESSION['mensaje'] = "Subfamilia editada correctamente.";
                 header('Location: mantenimiento_subfamilias.php');
                 exit();
                 
@@ -75,8 +75,8 @@ include_once "includes/header.php";
             <?php require_once('config/procesa_errores.php'); ?>
 
             <!-- Formulario -->
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" class="mt-4">
-                <!-- Campo oculto  -->
+            <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+            <!-- Campo oculto  -->
                 <input type="hidden" name="id_subfamilia" value="<?php echo htmlspecialchars($subfamilia->getIdSubFamilia()); ?>">
 
                 <!-- Nombre -->

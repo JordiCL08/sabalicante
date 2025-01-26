@@ -62,7 +62,7 @@ try {
             }
 
             // Mensaje de éxito
-            $_SESSION['mensaje'][] = "Producto añadido al carrito.";
+            $_SESSION['mensaje'] = "Producto añadido al carrito.";
         } else {
             throw new Exception("El producto no existe.");
         }

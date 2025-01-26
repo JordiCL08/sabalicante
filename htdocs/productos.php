@@ -58,10 +58,11 @@
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
+
         </div>
 
         <!-- Paginación -->
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center flex-wrap gap-2 mt-5">
             <?php if ($total_paginas > 1): ?>
                 <?php
                 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
@@ -72,30 +73,31 @@
                     'subfamilia' => $subfamilia
                 ]);
                 ?>
+          
+                    <!-- Botón "Anterior" -->
+                    <?php if ($pagina_actual > 1): ?>
+                        <a href="?pagina=<?php echo $pagina_actual - 1; ?>&<?php echo $parametros_paginacion; ?>"
+                            class="btn btn-outline-primary btn-lg rounded-pill me-3 shadow-sm">
+                            <i class="bi bi-arrow-left"></i> Anterior
+                        </a>
+                    <?php endif; ?>
 
-                <!-- Botón "Anterior" -->
-                <?php if ($pagina_actual > 1): ?>
-                    <a href="?pagina=<?php echo $pagina_actual - 1; ?>&<?php echo $parametros_paginacion; ?>"
-                        class="btn btn-outline-primary btn-lg rounded-pill me-3 shadow-sm">
-                        <i class="bi bi-arrow-left"></i> Anterior
-                    </a>
-                <?php endif; ?>
+                    <!-- Páginas numeradas -->
+                    <?php for ($pagina = 1; $pagina <= $total_paginas; $pagina++): ?>
+                        <a href="?pagina=<?php echo $pagina; ?>&<?php echo $parametros_paginacion; ?>"
+                            class="btn btn-outline-primary btn-lg rounded-pill me-2 <?php echo ($pagina == $pagina_actual) ? 'active' : ''; ?>">
+                            <?php echo $pagina; ?>
+                        </a>
+                    <?php endfor; ?>
 
-                <!-- Páginas numeradas -->
-                <?php for ($pagina = 1; $pagina <= $total_paginas; $pagina++): ?>
-                    <a href="?pagina=<?php echo $pagina; ?>&<?php echo $parametros_paginacion; ?>"
-                        class="btn btn-outline-primary btn-lg rounded-pill me-2 <?php echo ($pagina == $pagina_actual) ? 'active' : ''; ?>">
-                        <?php echo $pagina; ?>
-                    </a>
-                <?php endfor; ?>
-
-                <!-- Botón "Siguiente" -->
-                <?php if ($pagina_actual < $total_paginas): ?>
-                    <a href="?pagina=<?php echo $pagina_actual + 1; ?>&<?php echo $parametros_paginacion; ?>"
-                        class="btn btn-outline-primary btn-lg rounded-pill ms-3 shadow-sm">
-                        Siguiente <i class="bi bi-arrow-right"></i>
-                    </a>
-                <?php endif; ?>
+                    <!-- Botón "Siguiente" -->
+                    <?php if ($pagina_actual < $total_paginas): ?>
+                        <a href="?pagina=<?php echo $pagina_actual + 1; ?>&<?php echo $parametros_paginacion; ?>"
+                            class="btn btn-outline-primary btn-lg rounded-pill ms-3 shadow-sm">
+                            Siguiente <i class="bi bi-arrow-right"></i>
+                        </a>
+                    <?php endif; ?>
+                
             <?php endif; ?>
         </div>
 
