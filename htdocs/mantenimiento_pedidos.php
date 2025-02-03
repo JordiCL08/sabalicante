@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once(__DIR__ . '/../config/conectar_db.php');
 include_once 'gestores/gestor_pedidos.php';
 include_once 'gestores/gestor_usuarios.php';
 
@@ -10,7 +11,8 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SE
     header("Location: index.php");
     exit;
 }
-include_once 'includes/header.php';
+$pdo = conectar_db();
+
 $gestorPedidos = new GestorPedidos($pdo);
 $gestorUsuarios = new GestorUsuarios($pdo);
 
@@ -18,8 +20,8 @@ $gestorUsuarios = new GestorUsuarios($pdo);
 if (isset($_GET['borrar'])) {
     $id_pedido = $_GET['borrar'];
     $gestorPedidos->eliminar_pedido($id_pedido);
-    escribir_log("Pedido con ID: $id_pedido ha sido eliminado por el usuario: " . $_SESSION['usuario'], 'pedidos');
     header("Location: mantenimiento_pedidos.php?mensaje=pedido_eliminado");
+    escribir_log("Pedido con ID: $id_pedido ha sido eliminado por el usuario: " . $_SESSION['usuario'], 'pedidos');
     exit;
 }
 
@@ -29,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_pedido'], $_POST['
     $estado = $_POST['estado'];
     if (in_array($estado, ['Pendiente', 'Pagado', 'Enviado', 'Cancelado', 'Entregado'])) {
         $gestorPedidos->actualizar_estado_pedido($id_pedido, $estado);
-        escribir_log("Estado del pedido con ID: $id_pedido ha sido actualizado por el usuario: " . $_SESSION['usuario'] . " al estado: $estado.", 'pedidos');
         header("Location: mantenimiento_pedidos.php?mensaje=estado_actualizado");
+        escribir_log("Estado del pedido con ID: $id_pedido ha sido actualizado por el usuario: " . $_SESSION['usuario'] . " al estado: $estado.", 'pedidos');
         exit;
     }
 }
-
+include_once 'includes/header.php';
 $buscar_pedido = isset($_GET['buscar_pedido']) ? trim($_GET['buscar_pedido']) : '';
 list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
 ?>
