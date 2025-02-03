@@ -5,7 +5,7 @@ function cargar_carrito($id_usuario)
     global $pdo;
 
     // Cargar los productos del carrito desde la base de datos
-    $query = "SELECT * FROM carrito WHERE id_usuario = :id_usuario";
+    $query = "SELECT * FROM carritos WHERE id_usuario = :id_usuario";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
     $stmt->execute();
@@ -45,14 +45,14 @@ function guardar_carrito($id_usuario)
         return false;
     }
     //Borra el carrito anterior en la base de datos si existe
-    $query_borrar = "DELETE FROM carrito WHERE id_usuario = :id_usuario";
+    $query_borrar = "DELETE FROM carritos WHERE id_usuario = :id_usuario";
     $stmt_borrar = $pdo->prepare($query_borrar);
     $stmt_borrar->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
     $stmt_borrar->execute();
     //Inserta los productos del carrito en la base de datos
     foreach ($_SESSION['carrito'] as $producto) {
 
-        $query_insertar = "INSERT INTO carrito (id_usuario, codigo_producto, cantidad) 
+        $query_insertar = "INSERT INTO carritos (id_usuario, codigo_producto, cantidad) 
                             VALUES (:id_usuario, :codigo_producto, :cantidad)";
         $stmt_insertar = $pdo->prepare($query_insertar);
         $stmt_insertar->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
@@ -76,7 +76,7 @@ function actualizar_carrito($codigo, $cantidad, $pdo)
             if ($producto['codigo'] == $codigo) {
                 // Actualiza la cantidad en la sesión
                 $_SESSION['carrito'][$llave]['cantidad'] = $cantidad;
-                $query = "UPDATE carrito SET cantidad = :cantidad WHERE id_usuario = :id_usuario AND codigo_producto = :codigo_producto";
+                $query = "UPDATE carritos SET cantidad = :cantidad WHERE id_usuario = :id_usuario AND codigo_producto = :codigo_producto";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
                 $stmt->bindParam(':id_usuario', $_SESSION['id'], PDO::PARAM_INT);
@@ -99,7 +99,7 @@ function eliminar_producto_carrito($codigo, $pdo)
                 unset($_SESSION['carrito'][$llave]);
 
                 // Ahora eliminamos el producto de la base de datos
-                $query = "DELETE FROM carrito WHERE id_usuario = :id_usuario AND codigo_producto = :codigo_producto";
+                $query = "DELETE FROM carritos WHERE id_usuario = :id_usuario AND codigo_producto = :codigo_producto";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':id_usuario', $_SESSION['id'], PDO::PARAM_INT);
                 $stmt->bindParam(':codigo_producto', $codigo, PDO::PARAM_STR);
@@ -115,7 +115,7 @@ function eliminar_producto_carrito($codigo, $pdo)
 // Eliminar todos los productos del carrito en la base de datos
 function vaciar_carrito_base_datos($id_usuario, $pdo)
 {
-    $query = "DELETE FROM carrito WHERE id_usuario = :id_usuario";
+    $query = "DELETE FROM carritos WHERE id_usuario = :id_usuario";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
     return $stmt->execute();
