@@ -7,3 +7,5 @@
 [2025-02-01 13:55:25] El usuario aaaaa creado correctamente por el usuario: aaaaa
 [2025-02-01 13:55:59] El usuario gfgdfg creado correctamente por el usuario: Jordicodeviladl@gmail.com
 [2025-02-01 14:21:41] El usuario con DNI: 48673889r ha cambiado la contraseña con exito.
+[2025-02-03 21:24:39] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido activado por el usuario Jordicodeviladl@gmail.com
+[2025-02-03 21:24:39] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido editado por el usuario Jordicodeviladl@gmail.com

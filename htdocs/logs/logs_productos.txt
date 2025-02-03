@@ -8,3 +8,5 @@
 [2025-02-01 14:31:50] Producto con codigo: PAN0261 eliminado por el usuario Jordicodeviladl@gmail.com
 [2025-02-01 15:45:31] Producto con codigo: PAN09001 eliminado por el usuario Jordicodeviladl@gmail.com
 [2025-02-01 21:40:42] Producto : Pruebass dado de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-03 21:24:50] Producto con código: MNC02122 activado por el usuario Jordicodeviladl@gmail.com
+[2025-02-03 21:24:50] Producto con código: MNC02122  editado por el usuario Jordicodeviladl@gmail.com

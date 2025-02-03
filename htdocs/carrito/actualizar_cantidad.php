@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['codigo']) && isset($_P
         header('Location: carrito.php');
         exit();
     } else {
-        // Puedes manejar el error, como mostrar un mensaje
         echo "Error: cantidad no válida o artículo no encontrado.";
     }
 }

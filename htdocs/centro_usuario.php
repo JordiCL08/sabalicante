@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancelar_pedido'])) {
                                     </table>
                                 </div>
                             <?php else: ?>
-                                <p class="text-center text-muted">No tienes pedidos aún.</p>
+                                <p class="text-center text-muted">Aún no tienes pedidos.</p>
                             <?php endif; ?>
                         </div>
                     </div>

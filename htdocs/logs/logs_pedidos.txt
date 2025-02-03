@@ -7,3 +7,13 @@
 [2025-02-02 20:37:10] ID Pedido: 14 completado con exito por el usuario: anavegaca@hotmail.com
 [2025-02-02 20:37:24] ID Pedido: 15 completado con exito por el usuario: anavegaca@hotmail.com
 [2025-02-02 20:44:30] ID Pedido: 16 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-03 21:23:53] Estado del pedido con ID: 2 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Enviado.
+[2025-02-03 21:23:58] Estado del pedido con ID: 2 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Pagado.
+[2025-02-03 21:25:04] Estado del pedido con ID: 7 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Enviado.
+[2025-02-03 21:25:40] Pedido con ID: 6 ha sido eliminado por el usuario: Jordicodeviladl@gmail.com
+[2025-02-03 21:26:40] Estado del pedido con ID: 7 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Entregado.
+[2025-02-03 21:29:44] Estado del pedido con ID: 3 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Entregado.
+[2025-02-03 21:31:26] Estado del pedido con ID: 2 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Cancelado.
+[2025-02-03 21:33:35] Estado del pedido con ID: 1 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Cancelado.
+[2025-02-03 21:33:38] Estado del pedido con ID: 4 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Entregado.
+[2025-02-03 21:33:40] Pedido con ID: 7 ha sido eliminado por el usuario: Jordicodeviladl@gmail.com
