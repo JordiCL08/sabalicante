@@ -1,10 +1,11 @@
 <?php
+session_start();
 include_once "config/conectar_db.php";
 include_once "gestores/gestor_productos.php";
-session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
+    escribir_log("Error al acceder a la zona de 'nueva producto' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -82,10 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //Crear producto
             $producto = new Producto($codigo, $nombre, $descripcion, $subfamilia, $precio, $nombre_imagen_bd, $descuento, 1, $stock);
             if ($gestorProductos->crear_producto($producto)) {
+                $nom_producto = $producto->getNombre();
+                escribir_log("Producto : $nom_producto dado de alta con exito por el usuario: " . $_SESSION['usuario'], 'productos');
                 $_SESSION['mensaje'] = "Producto registrado correctamente.";
                 header('Location: mantenimiento_productos.php');
                 exit();
             } else {
+                escribir_log("Error al dar el producto : $nom_producto de alta en el sistema por el usuario: " . $_SESSION['usuario'], 'productos');
                 $errores[]  = "Error al dar de alta el producto.";
             }
         } catch (PDOException $e) {

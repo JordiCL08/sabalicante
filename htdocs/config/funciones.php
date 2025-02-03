@@ -52,17 +52,25 @@ function comprobar_email($email, &$errores)
     return true;
 }
 
-function obtenerColorEstadoPedido($estadoPedido) {
-    switch (strtolower($estadoPedido)) {
+function obtener_color_estado_pedido($estado_pedido)
+{
+    switch (strtolower($estado_pedido)) {
         case 'pendiente':
-            return 'warning'; 
+            return 'warning';
         case 'enviado':
-            return 'info'; 
+            return 'info';
         case 'entregado':
-            return 'success'; 
+            return 'success';
         case 'cancelado':
-            return 'danger'; 
+            return 'danger';
         default:
-            return 'secondary'; 
+            return 'secondary';
     }
+}
+
+function escribir_log($mensaje, $tipo_log)
+{
+    $archivo_log = __DIR__ . "/../logs/logs_$tipo_log.txt";
+    $fecha = date("Y-m-d H:i:s");
+    file_put_contents($archivo_log, "[$fecha] $mensaje" . PHP_EOL, FILE_APPEND);
 }

@@ -1,11 +1,13 @@
 <?php
-include_once 'config/conectar_db.php';
-
 session_start();
+include_once 'config/conectar_db.php';
+include_once 'config/funciones.php';
+
 $dni = $_SESSION['dni'] ?? null;
 $errores = [];
 $mensaje = [];
 if ($dni === null) {
+    escribir_log("Intento de cambio de contraseña con DNI inexistente en la base de datos.", 'usuarios');
     header("Location:index.php");
     exit();
 }
@@ -34,14 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resultado = $stmt->execute();
 
             if ($resultado) {
+                escribir_log("El usuario con DNI: $dni ha cambiado la contraseña con exito.", 'usuarios');
                 // Si la actualización fue exitosa, mostramos un mensaje y cerramos sesión
-                $_SESSION['mensaje'] = "Contraseña cambiada con éxito.";
+                $mensaje = "Contraseña cambiada con éxito.";
                 session_unset();
                 session_destroy();
                 header("Location: index.php");
                 exit();
             } else {
-                // Si hubo un problema con la consulta
+                escribir_log("Error al cambiar la contraseña del usuario con DNI: $dni", 'usuarios');
                 $_SESSION['errores'][] = "Error al cambiar la contraseña.";
             }
         } catch (PDOException $e) {
@@ -54,8 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-<!-- Muestra errores -->
-<?php require_once 'config/procesa_errores.php'; ?>
 <?php include_once "includes/header.php"; ?>
 <!-- Contenedor principal de la página -->
 <div class="container-fluid d-flex flex-column min-vh-100">
@@ -64,12 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <aside class="col-md-3 col-lg-2 bg-secondary text-white p-4">
             <?php include_once "includes/menu_lateral.php"; ?>
         </aside>
-
         <!-- Contenido principal -->
         <main class="col-md-9 col-lg-10 p-4 bg-white">
             <div class="container d-flex justify-content-center align-items-center">
                 <!-- AQUI -->
                 <div class="container p-5">
+                    <!-- Muestra errores -->
+                    <?php require_once 'config/procesa_errores.php'; ?>
                     <!-- Muestra errores -->
                     <div class="row justify-content-center">
                         <div class="col-md-6">

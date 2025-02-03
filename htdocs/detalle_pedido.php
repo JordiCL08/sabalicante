@@ -24,7 +24,6 @@ $gestorPedidos = new GestorPedidos($pdo);
 $gestorProducto = new GestorProductos($pdo);
 $gestorUsuarios = new GestorUsuarios($pdo);
 $detalle_usuario = $gestorUsuarios->obtener_usuario_por_id($id_usuario);
-
 // Asegurarse de que el usuario y el pedido están disponibles
 if (!$detalle_usuario) {
     echo "No se encontraron datos para el usuario.";
@@ -106,6 +105,12 @@ if ($id_pedido) {
                                                         <td><?php echo number_format($linea['subtotal'], 2); ?> €</td>
                                                     </tr>
                                                 <?php endforeach; ?>
+                                                <!-- Mostrar los gastos de envío -->
+                                                <?php if (isset($linea['recogida_local']) && $linea['recogida_local'] == false): ?>
+                                                    <tr>
+                                                        <td colspan="8" class="text-right"><strong>Gastos de Envío: 5 €</strong></td>
+                                                    </tr>
+                                                <?php endif; ?>
                                             </tbody>
                                         </table>
                                     </div>

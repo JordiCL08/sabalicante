@@ -1,15 +1,16 @@
 <?php
-include_once 'includes/header.php';
+session_start();
 include_once 'gestores/gestor_pedidos.php';
 include_once 'gestores/gestor_usuarios.php';
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado' && $_SESSION['rol'] !== 'Contable') {
+    escribir_log("Error al acceder a la zona de 'Mantenimiento Pedidos' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
 }
-
+include_once 'includes/header.php';
 $gestorPedidos = new GestorPedidos($pdo);
 $gestorUsuarios = new GestorUsuarios($pdo);
 
@@ -17,6 +18,7 @@ $gestorUsuarios = new GestorUsuarios($pdo);
 if (isset($_GET['borrar'])) {
     $id_pedido = $_GET['borrar'];
     $gestorPedidos->eliminar_pedido($id_pedido);
+    escribir_log("Pedido con ID: $id_pedido ha sido eliminado por el usuario: " . $_SESSION['usuario'], 'pedidos');
     header("Location: mantenimiento_pedidos.php?mensaje=pedido_eliminado");
     exit;
 }
@@ -27,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_pedido'], $_POST['
     $estado = $_POST['estado'];
     if (in_array($estado, ['Pendiente', 'Pagado', 'Enviado', 'Cancelado', 'Entregado'])) {
         $gestorPedidos->actualizar_estado_pedido($id_pedido, $estado);
+        escribir_log("Estado del pedido con ID: $id_pedido ha sido actualizado por el usuario: " . $_SESSION['usuario'] . " al estado: $estado.", 'pedidos');
         header("Location: mantenimiento_pedidos.php?mensaje=estado_actualizado");
         exit;
     }
@@ -67,6 +70,7 @@ list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
                     <th>Estado</th>
                     <th>Precio Total</th>
                     <th>Cambiar Estado</th>
+                    <th>Envio o Recogida</th>
                     <th>Borrar</th>
                 </tr>
             </thead>
@@ -93,10 +97,11 @@ list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
                                 </form>
                             </td>
                             <td>
+                                <?php echo htmlspecialchars($pedido->recogida_local ? 'Recogida en Local' : 'A Domicilio'); ?>
+                            </td>
+                            <td>
                                 <a href="mantenimiento_pedidos.php?borrar=<?php echo urlencode($pedido->id_pedido); ?>"
-                                    class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i> Borrar
-                                </a>
+                                    class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas borrar este pedido?');"><i class="bi bi-trash"></i> Borrar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

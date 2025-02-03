@@ -1,13 +1,16 @@
-<!-- CABECERA -->
 <?php
-include_once 'includes/header.php';
-
+session_start();
+include_once 'config/funciones.php';
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
+    escribir_log("Error al acceder a la zona de 'Mantenimiento Subfamilias' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
 }
+
+include_once 'includes/header.php';
+
 $rol = $_SESSION['rol'];
 $nombre_usuario = $_SESSION['usuario'];
 

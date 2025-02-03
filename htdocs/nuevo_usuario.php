@@ -1,5 +1,5 @@
 <?php
-include_once "config/funciones.php";
+session_start();
 include_once "config/conectar_db.php";
 include_once "gestores/gestor_usuarios.php";
 
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errores[] = "Error al verificar el DNI: " . $e->getMessage();
     }
 
-    // Verificar si el EMAIL ya existe en la base de datos
+    // Verificar si el EMAIL/USUARIO ya existe en la base de datos
     try {
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
         $stmt->bindValue(':email', $email);
@@ -64,20 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } catch (PDOException $e) {
         $errores[] = "Error al verificar el Correo Electronico: " . $e->getMessage();
-    }
-
-
-    // Verificar si el USUARIO ya existe en la base de datos
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
-        $stmt->bindValue(':email', $email);
-        $stmt->execute();
-
-        if ($stmt->fetch()) {
-            $errores[] = "El correo: $email ya está registrado.";
-        }
-    } catch (PDOException $e) {
-        $errores[] = "Error al verificar el usuario: " . $e->getMessage();
     }
 
     // Validar que las contraseñas coincidan
@@ -100,10 +86,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultado = $gestorUsuarios->crear_usuario($usuario);
 
             if ($resultado) {
+                $nom_usuario  = $usuario->getNombre();
+                $creador_usuario = !empty($_SESSION['usuario']) ? $_SESSION['usuario'] : $nom_usuario;
+                escribir_log("El usuario $nom_usuario creado correctamente por el usuario: $creador_usuario", 'usuarios');
                 $_SESSION['mensaje'] = "Registro creado correctamente.";
                 header('Location: index.php');
                 exit();
             } else {
+                escribir_log("Error al crear el usuario $nom_usuario ", 'usuarios');
                 $errores[] = "Hubo un problema al registrar al usuario.";
                 header('Location: index.php');
             }
@@ -126,11 +116,9 @@ include_once "includes/header.php";
     <div class="row flex-grow-1 justify-content-center">
         <!-- Formulario de registro -->
         <main class="col-md-8 col-lg-6 p-4  bg-light">
-            <h2 class="text-center mb-4">Formulario de Nuevo Usuario</h2>
-
             <!-- Muestra errores, si los hay -->
             <?php require_once('config/procesa_errores.php'); ?>
-
+            <h2 class="text-center mb-4">Formulario de Nuevo Usuario</h2>
             <!-- Formulario -->
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="needs-validation" novalidate>
                 <!-- Datos personales -->

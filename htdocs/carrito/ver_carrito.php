@@ -61,8 +61,8 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
 
                         <!-- Botón de eliminar -->
                         <td>
-                            <form method="POST" action="carrito/eliminar_carrito.php" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto del carrito?');">
-                                <input type="hidden" name="index" value="<?= htmlspecialchars($index) ?>">
+                            <form method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto del carrito?');">
+                                <input type="hidden" name="eliminar" value="<?= htmlspecialchars($producto['codigo']) ?>"> 
                                 <button type="submit" class="btn btn-danger btn-sm" title="Eliminar del carrito"><i class="bi bi-trash"></i> Eliminar</button>
                             </form>
                         </td>

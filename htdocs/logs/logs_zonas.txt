@@ -1,0 +1,13 @@
+[2025-02-01 13:01:34] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:05:56] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->
+[2025-02-01 13:07:04] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:07:32] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:07:33] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:07:33] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:08:05] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:13:05] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:13:32] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:14:44] Error al acceder a la zona de 'Mantenimiento Pedidos' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 13:24:51] Error al acceder a la zona de 'Mantenimiento Usuarios' por falta de permisos ->anavegaca@hotmail.com
+[2025-02-01 14:14:02] Error al acceder a la zona de 'Mantenimiento Usuarios' por falta de permisos ->anavegaca@hotmail.com
+

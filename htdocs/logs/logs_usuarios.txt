@@ -1,0 +1,9 @@
+[2025-02-01 12:03:55] El usuario: Vera GarcÃ­a DNI: 05303239Z  fue eliminado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 12:56:04] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido desactivado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 12:56:04] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 13:00:46] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido activado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 13:00:46] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 13:52:14] El usuario aaa creado correctamente por el usuario: 
+[2025-02-01 13:55:25] El usuario aaaaa creado correctamente por el usuario: aaaaa
+[2025-02-01 13:55:59] El usuario gfgdfg creado correctamente por el usuario: Jordicodeviladl@gmail.com
+[2025-02-01 14:21:41] El usuario con DNI: 48673889r ha cambiado la contraseña con exito.

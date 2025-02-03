@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancelar_pedido'])) {
     $id_pedido = $_POST['id_pedido'];
     $estado = $_POST['estado'];  // "cancelado"
     $gestorPedidos->actualizar_estado_pedido($id_pedido, $estado);
+    escribir_log("El usuario: ". $_SESSION['usuario']. "ha cancelado el pedido : Nº $id_pedido",'pedidos');
     header("Location: centro_usuario.php");
     exit;
 }
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancelar_pedido'])) {
                                                     <td><?php echo date('d-m-Y', strtotime($pedido['fecha'])); ?></td>
                                                     <td><?php echo number_format($pedido['total'], 2); ?> €</td>
                                                     <td>
-                                                        <span class="badge bg-<?php echo obtenerColorEstadoPedido($pedido['estado']); ?>">
+                                                        <span class="badge bg-<?php echo obtener_color_estado_pedido($pedido['estado']); ?>">
                                                             <?php echo htmlspecialchars($pedido['estado']); ?>
                                                         </span>
                                                     </td>

@@ -1,13 +1,21 @@
 <?php
-include_once "includes/header.php";
+session_start();
+include_once 'config/funciones.php';
+include_once 'config/conectar_db.php';
+include_once 'gestores/gestor_productos.php';
+
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador'  && $_SESSION['rol'] !== 'Contable') {
+    escribir_log("Error al acceder a la zona de 'Visor de ventas' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
-    exit; 
+    exit;
 }
+include_once 'includes/header.php';
+
 try {
     $pdo = conectar_db();
+    $gestorProductos = new GestorProductos($pdo);
     $query = "SELECT id_pedido, fecha, total, id_usuario,forma_pago FROM pedidos ORDER BY fecha DESC";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
@@ -26,11 +34,34 @@ try {
             <h1 class="text-center display-4 mb-4">Visor de Ventas</h1>
         </div>
     </div>
+    <!-- TOP Ventas -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0"><i class="fas fa-chart-line"></i> Top 5 Productos Más Vendidos</h5>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                <?php
+                $top_ventas = $gestorProductos->top_ventas();  
+                if (!empty($top_ventas)) {
+                    foreach ($top_ventas as $producto) {
+                        echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
+                        echo 'Código del Producto: ' . htmlspecialchars($producto->codigo_producto);
+                        echo '<p>Total vendido: ' . $producto->total_vendido . ' /uds </p>';
+                        echo '</li>';
+                    }
+                } else {
+                    echo '<li class="list-group-item text-center">No hay datos disponibles.</li>';
+                }
+                ?>
+            </div>
+        </div>
+    </div>
 
     <!-- Filtros por fecha -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-            <i class="fas fa-filter"></i> Filtros
+            <i class="fas fa-filter"></i> Filtro fecha
         </div>
         <div class="card-body">
             <div class="row">
@@ -156,5 +187,6 @@ try {
     });
 </script>
 
+
 <!-- Footer -->
-<?php include_once "includes/footer.php"; ?>
+<?php include_once 'includes/footer.php'; ?>

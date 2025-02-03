@@ -1,7 +1,8 @@
 <?php
+session_start();
 include_once 'config/conectar_db.php';
 include_once 'config/funciones.php';
-session_start();
+
 $errores = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,8 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 ?>
-<!-- Muestra errores -->
-<?php require_once 'config/procesa_errores.php'; ?>
 <?php include_once "includes/header.php"; ?>
 <!-- Contenedor principal de la página -->
 <div class="container-fluid d-flex flex-column min-vh-100">
@@ -57,12 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <aside class="col-md-3 col-lg-2 bg-secondary text-white p-4">
             <?php include_once "includes/menu_lateral.php"; ?>
         </aside>
-
         <!-- Contenido principal -->
         <main class="col-md-9 col-lg-10 p-4 bg-white">
+            <!-- Muestra errores -->
+            <?php require_once 'config/procesa_errores.php'; ?>
             <div class="container d-flex justify-content-center align-items-center">
                 <!-- AQUI -->
-
                 <div class="container p-8">
                     <div class="row justify-content-center">
                         <div class="col-md-8">

@@ -1,0 +1,9 @@
+[2025-02-01 12:22:49] El usuario: anavegaca@hotmail.comha cancelado el pedido: 10
+[2025-02-01 13:17:34] Estado del pedido con ID: 1 actualizado por el usuario:Jordicodeviladl@gmail.com al estado: Pagado.
+[2025-02-01 13:17:57] Pedido con ID: 6 eliminado por el usuario:Jordicodeviladl@gmail.com
+[2025-02-01 13:19:23] Pedido con ID: 1 eliminado por el usuario:Jordicodeviladl@gmail.com
+[2025-02-01 14:24:58] ID Pedido: 13 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-01 21:13:39] ID Pedido: 13 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-02 20:37:10] ID Pedido: 14 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-02 20:37:24] ID Pedido: 15 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-02 20:44:30] ID Pedido: 16 completado con exito por el usuario: anavegaca@hotmail.com

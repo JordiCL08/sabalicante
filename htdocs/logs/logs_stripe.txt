@@ -1,0 +1,8 @@
+[2025-02-01 14:15:02] El pago del pedido ha pasado Array por stripe
+[2025-02-01 19:05:31] El pago del pedido ha pasado por stripe
+[2025-02-01 19:12:22] El pago del pedido ha pasado por stripe
+[2025-02-01 19:15:30] El pago del pedido ha pasado por Stripe
+[2025-02-01 19:24:03] El pago del pedido ha pasado por stripe
+[2025-02-01 21:06:06] El pago del pedido ha pasado por stripe
+[2025-02-01 21:13:24] El pago del pedido ha pasado por stripe
+[2025-02-02 20:36:52] El pago del pedido ha pasado por stripe

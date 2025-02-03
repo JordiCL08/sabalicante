@@ -1,13 +1,15 @@
 <?php
-include_once 'config/conectar_db.php';
-include_once 'gestores/gestor_productos.php';
-include_once 'gestores/gestor_usuarios.php';
-include_once 'gestores/gestor_familias.php';
-include_once 'gestores/gestor_subfamilias.php';
 // Iniciar la sesión si no está activa
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+include_once(__DIR__ . '/../config/conectar_db.php');
+include_once(__DIR__ . '/../gestores/gestor_productos.php');
+include_once(__DIR__ . '/../gestores/gestor_usuarios.php');
+include_once(__DIR__ . '/../gestores/gestor_familias.php');
+include_once(__DIR__ . '/../gestores/gestor_subfamilias.php');
+include_once(__DIR__ . '/../gestores/gestor_carritos.php');
+
 $pdo = conectar_db();
 $gestorSubFamilias = new GestorSubFamilias($pdo);
 $gestorProductos = new GestorProductos($pdo);
@@ -40,12 +42,12 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
         <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] !== 'Usuario'): ?>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Panel de Gestión</a>
+                    <a class="navbar-brand" href="index.php">Panel de Gestión</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <!-- Gestión de Usuarios -->
                             <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] !== 'Contable'): ?>
                                 <li class="nav-item">
@@ -56,6 +58,7 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                                     <a class="nav-link" href="mantenimiento_productos.php">Gestión de Productos</a>
                                 </li>
                             <?php endif; ?>
+
                             <!-- Gestión de Familias -->
                             <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'Administrador'): ?>
                                 <li class="nav-item">
@@ -66,14 +69,24 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                                     <a class="nav-link" href="mantenimiento_subfamilias.php">Gestión de SubFamilias</a>
                                 </li>
                             <?php endif; ?>
+
                             <!-- Gestión de Pedidos -->
                             <li class="nav-item">
                                 <a class="nav-link" href="mantenimiento_pedidos.php">Gestión de Pedidos</a>
                             </li>
+
                             <!-- Gestión de Ventas -->
                             <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] !== 'Empleado'): ?>
                                 <li class="nav-item">
                                     <a class="nav-link" href="visor_ventas.php">Visor de Ventas</a>
+                                </li>
+                            <?php endif; ?>
+
+                            <!-- LOGS -->
+                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'Administrador'): ?>
+                                <div class="vr mx-3"></div> <!-- Separador visual -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="visor_logs.php">LOGS</a>
                                 </li>
                             <?php endif; ?>
                         </ul>
@@ -87,17 +100,18 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
         <?php endif; ?>
         <!-- NAVBAR Solo para usuarios normales -->
         <?php if (!isset($_SESSION['rol']) || $_SESSION['rol'] === 'Usuario'): ?>
-            <nav class="navbar navbar-expand-lg navbar-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <!-- Logo centrado -->
-                    <a href="index.php" class="logo-btn d-block">
+                    <a href="index.php" class="logo-btn d-block mx-auto">
                         <img src="estilos/logo.png" alt="Logo Sabores Alicante" class="logo-navbar">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#hamburgesa_menu" aria-controls="hamburgesa_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <div class="collapse navbar-collapse" id="hamburgesa_menu">
                         <!-- Menú a la izquierda -->
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -109,12 +123,23 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Contacto</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Envío</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Devoluciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Promociones</a>
+                            </li>
                         </ul>
-                        <!-- Buscador -->
-                        <form class="d-flex mx-auto w-50 mb-4" role="search" method="get">
+
+                        <!-- Buscador-->
+                        <form class="d-flex mx-auto mb-2" role="search" method="get" style="max-width: 800px; width: 100%;">
                             <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar" name="buscar_producto" value="">
-                            <button class="btn btn-outline-primary btn-lg" type="submit">Buscar</button>
+                            <button class="btn btn-outline-primary" type="submit">Buscar</button>
                         </form>
+
                         <!-- Menú a la derecha -->
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -125,15 +150,16 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                                 </a>
                             </li>
                             <li class="nav-item position-relative">
-                                <a class="nav-link bi bi-cart me-4 fs-5 text-dark" href="carrito.php" aria-label="Mi Carrito">Mi Carrito
+                                <a class="nav-link bi bi-cart me-4 fs-5 text-dark" href="carrito.php" aria-label="Mi Carrito">
+                                    Mi Carrito
                                     <span class="badge bg-success rounded-circle position-absolute translate-middle p-2">
                                         <?php
+                                        // Calcular el total de artículos en el carrito
                                         if (isset($_SESSION['carrito'])) {
-                                            $totalArticulos = 0; //inicializa en 0
-                                            foreach ($_SESSION['carrito'] as $articulo) {
-                                                $totalArticulos += $articulo['cantidad']; //recorre el nº de articulos del carrito y los suma para dar el total
-                                            }
-                                            echo $totalArticulos; //Muestral el total
+                                            $total_articulos = array_reduce($_SESSION['carrito'], function ($total, $articulo) {
+                                                return $total + $articulo['cantidad'];
+                                            }, 0);
+                                            echo $total_articulos;
                                         } else {
                                             echo 0;
                                         }
@@ -148,5 +174,4 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
             <!-- Línea inferior decorativa -->
             <div class="_linea-inf"></div>
         <?php endif; ?>
-
     </header>

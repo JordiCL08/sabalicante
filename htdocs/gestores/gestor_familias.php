@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/../config/funciones.php');
 // Clase Familia
 
 class Familia
@@ -67,11 +68,6 @@ class GestorFamilias
     public function mostrar_familias($buscar_familia = '', $ordenar = 'ASC')
     {
         try {
-            // Validar que el parámetro 'ordenar' sea válido
-            if (!in_array(strtoupper($ordenar), ['ASC', 'DESC'])) {
-                throw new Exception('Orden no válido');
-            }
-
             // Definir el número de registros por página
             $registros = 10;
 
@@ -106,7 +102,6 @@ class GestorFamilias
                     $familia->activo
                 );
             }
-
             // Devolver los productos y la cantidad total de páginas
             return [$familias, $total_paginas];
         } catch (PDOException $e) {
@@ -136,11 +131,9 @@ class GestorFamilias
     // Crear una nueva familia
     public function crear_familia(Familia $familia)
     {
-        $query = "INSERT INTO familias (nombre, descripcion, activo)
-VALUES (:nombre, :descripcion, 1)";
+        $query = "INSERT INTO familias (nombre, descripcion, activo) VALUES (:nombre, :descripcion, 1)";
         try {
             $stmt = $this->pdo->prepare($query);
-
             $stmt->bindValue(':nombre', $familia->getNombre());
             $stmt->bindValue(':descripcion', $familia->getDescripcion());
             if ($stmt->execute()) {

@@ -1,0 +1,10 @@
+[2025-02-01 11:41:57] Producto con codigo: CMS55555 eliminado por el usuarioJordicodeviladl@gmail.com
+[2025-02-01 12:47:34] Producto con código: BEE59856 desactivado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 12:47:34] Producto con código: BEE59856  editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 12:47:47] Producto con código: BEE59856 activado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 12:47:47] Producto con código: BEE59856  editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 13:40:06] Producto : pppprprprp dado de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-01 13:41:10] Producto : Jordi Pepe dado de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-01 14:31:50] Producto con codigo: PAN0261 eliminado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 15:45:31] Producto con codigo: PAN09001 eliminado por el usuario Jordicodeviladl@gmail.com
+[2025-02-01 21:40:42] Producto : Pruebass dado de alta con exito por el usuario: Jordicodeviladl@gmail.com

@@ -1,10 +1,11 @@
 <?php
+session_start();
 include_once "config/conectar_db.php";
 include_once "gestores/gestor_subfamilias.php";
-session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
 if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
+    escribir_log("Error al acceder a la zona de 'nueva subfamilia' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -37,10 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $subfamilia = new Subfamilia(null, $id_familia, $nombre, $descripcion, 1);
             // Registrar la subfamilia
             if ($gestorSubFamilia->crear_subfamilia($subfamilia)) {
+                $nom_subfamilia = $subfamilia->getNombre();
+                escribir_log("Subamilia : $nom_subfamilia dada de alta con exito por el usuario: " . $_SESSION['usuario'], 'subfamilias');
                 $_SESSION['mensaje'] = "Subfamilia registrada correctamente.";
                 header('Location: mantenimiento_subfamilias.php');
                 exit();
             } else {
+                escribir_log("Error al dar la subfamilia : $nom_subfamilia de alta en el sistema por el usuario: " . $_SESSION['usuario'], 'subfamilias');
                 $errores[] = "Error al dar de alta la subfamilia.";
             }
         } catch (PDOException $e) {

@@ -10,7 +10,6 @@ session_start();
         <aside class="col-md-3 col-lg-2 bg-secondary text-white p-4">
             <?php include_once "includes/menu_lateral.php"; ?>
         </aside>
-
         <!-- Contenido principal -->
         <main class="col-md-9 col-lg-10 bg-light p-4">
             <?php include_once "config/procesa_errores.php"; ?>

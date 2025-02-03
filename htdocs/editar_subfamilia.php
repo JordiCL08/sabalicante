@@ -45,12 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_subfamilia'])) 
         try {
             $resultado = $gestorSubFamilia->editar_subfamilia($subfamilia);
             if ($resultado) {
+                if ($activo == false) {
+                    escribir_log("Subfamilia con id: $id_subfamilia desactivada por el usuario " . $_SESSION['usuario'], 'subfamilias');
+                } else {
+                    escribir_log("Subfamilia con id: $id_subfamilia activada por el usuario " . $_SESSION['usuario'], 'subfamilias');
+                }
+                escribir_log("Subfamilia con id: $id_subfamilia editada por el usuario " . $_SESSION['usuario'], 'subfamilias');
                 $_SESSION['mensaje'] = "Subfamilia editada correctamente.";
                 header('Location: mantenimiento_subfamilias.php');
                 exit();
-                
             }
         } catch (PDOException $e) {
+            escribir_log("Error al editar la subfamilia con id: $id_subfamilia por el usuario " . $_SESSION['usuario'], 'subfamilias');
             $errores[] = "Error al actualizar los datos: " . $e->getMessage();
         }
     }
@@ -76,7 +82,7 @@ include_once "includes/header.php";
 
             <!-- Formulario -->
             <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-            <!-- Campo oculto  -->
+                <!-- Campo oculto  -->
                 <input type="hidden" name="id_subfamilia" value="<?php echo htmlspecialchars($subfamilia->getIdSubFamilia()); ?>">
 
                 <!-- Nombre -->

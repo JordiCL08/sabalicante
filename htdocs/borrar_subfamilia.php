@@ -35,8 +35,10 @@ if (isset($_GET['id_subfamilia'])) {
             $borrar_subfamilia = $gestorSubFamilia->borrar_subfamilia($id_subfamilia); // Asegúrate de pasar solo el código
 
             if ($borrar_subfamilia) {
+                escribir_log("Subfamilia con id: $id_subfamilia eliminada por el usuario ". $_SESSION['usuario'],'subfamilias');
                 $_SESSION['mensaje'] = "Subfamilia con id: $id_subfamilia eliminada correctamente.";
             } else {
+                escribir_log("Hubo un intento de borrado de subfamilia con id: $id_subfamilia por el usuario ". $_SESSION['usuario'],'subfamilias');
                 $_SESSION['errores'][] = "Error al eliminar la familia: $nombre_subfamilia.";
             }
 

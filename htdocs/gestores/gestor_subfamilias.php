@@ -1,4 +1,6 @@
 <?php
+include_once(__DIR__ . '/../config/funciones.php');
+
 // Clase SubFamilia
 class Subfamilia
 {
@@ -59,11 +61,6 @@ class GestorSubFamilias
     public function mostrar_subfamilias($buscar_subfamilia = '', $ordenar = 'ASC')
     {
         try {
-            // Validar que el parámetro 'ordenar' sea válido
-            if (!in_array(strtoupper($ordenar), ['ASC', 'DESC'])) {
-                throw new Exception('Orden no válido');
-            }
-
             // Definir el número de registros por página
             $registros = 10;
 
@@ -72,11 +69,8 @@ class GestorSubFamilias
             $inicio = ($pagina - 1) * $registros;
 
             // Calcular el total de registros
-            $query_count = "
-            SELECT COUNT(*) as total
-            FROM subfamilias s
-            WHERE s.nombre LIKE :buscar_subfamilia
-            ";
+            $query_count = "SELECT COUNT(*) as total FROM subfamilias s WHERE s.nombre LIKE :buscar_subfamilia";
+            
             $stmt = $this->pdo->prepare($query_count);
             $stmt->bindValue(':buscar_subfamilia', '%' . $buscar_subfamilia . '%');
             $stmt->execute();

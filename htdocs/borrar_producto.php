@@ -34,8 +34,10 @@ if (isset($_GET['codigo'])) {
             $borrar_producto = $gestorProductos->borrar_producto($codigo); // Asegúrate de pasar solo el código
 
             if ($borrar_producto) {
+                escribir_log("Producto con codigo: $codigo eliminado por el usuario ". $_SESSION['usuario'],'productos');
                 $_SESSION['mensaje'] = "Producto con código $codigo eliminado correctamente.";
             } else {
+                escribir_log("Hubo un intento de borrado de producto con codigo: $codigo por el usuario". $_SESSION['usuario'],'productos');
                 $_SESSION['errores'][] = "Error al eliminar el producto con código: $codigo.";
             }
 

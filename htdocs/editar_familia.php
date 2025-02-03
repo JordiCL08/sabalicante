@@ -41,11 +41,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_familia'])) {
             $familia = new Familia($id_familia, $nombre, $descripcion, $activo);
             $resultado = $gestorFamilia->editar_familia($familia);
             if ($resultado) {
+                if ($activo == false) {
+                    escribir_log("Familia con id: $id_familia desactivada por el usuario " . $_SESSION['usuario'], 'familias');
+                } else {
+                    escribir_log("Familia con id: $id_familia activada por el usuario " . $_SESSION['usuario'], 'familias');
+                }
+                escribir_log("Familia con id: $id_familia editada por el usuario " . $_SESSION['usuario'], 'familias');
                 $_SESSION['mensaje'] = "Familia editada correctamente.";
                 header('Location: mantenimiento_familias.php');
                 exit();
             }
         } catch (PDOException $e) {
+            escribir_log("Error al editar la familia con id: $id_familia por el usuario " . $_SESSION['usuario'], 'familias');
             $errores[] = "Error al actualizar los datos: " . $e->getMessage();
         }
     }

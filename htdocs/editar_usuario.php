@@ -106,6 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             try {
                 $resultado = $gestorUsuario->editar_usuario($usuario);
                 if ($resultado) {
+                    if ($activo == false) {
+                        escribir_log("El usuario $email con DNI: $dni ha sido desactivado por el usuario " . $_SESSION['usuario'], 'usuarios');
+                    } else {
+                        escribir_log("El usuario $email con DNI: $dni ha sido activado por el usuario " . $_SESSION['usuario'], 'usuarios');
+                    }
+                    escribir_log("El usuario $email con DNI: $dni ha sido editado por el usuario " . $_SESSION['usuario'], 'usuarios');
                     $_SESSION['mensaje'] = "El usuario ha sido editado.";
                     if ($_SESSION['rol'] === 'Administrador') {
                         header('Location: mantenimiento_usuarios.php');
@@ -116,6 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
             } catch (PDOException $e) {
+                escribir_log("Error al editar el usuario $email con DNI: $dni por el usuario " . $_SESSION['usuario'], 'usuarios');
                 $errores[] = "Error al actualizar datos: " . $e->getMessage();
             }
         }
@@ -125,6 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['dar_baja'])) {
         if ($usuario) {
             if ($rol_sesion === 'Administrador' && $usuario->getId() == $id_usuario) {
+                escribir_log("No puedes desactivar tu propia cuenta como administrador : $usuario", 'usuarios');
                 $errores[] = "No puedes desactivar tu propia cuenta como administrador.";
             } else {
                 try {
@@ -135,6 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     exit();
                     }
                 } catch (PDOException $e) {
+                    escribir_log("Error al procesar la baja  del usuario $email con DNI: $dni por el usuario " . $_SESSION['usuario'], 'usuarios');
                     $errores[] = "Error al procesar la baja: " . $e->getMessage();
                 }
             }

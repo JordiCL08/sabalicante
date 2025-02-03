@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/../config/funciones.php');
 
 // Clase Producto
 class Producto
@@ -123,11 +124,6 @@ class GestorProductos
     public function mostrar_productos($buscar_producto = '', $ordenar = 'ASC', $familia = null, $subfamilia = null)
     {
         try {
-            // Validar que el parámetro 'ordenar' sea válido
-            if (!in_array(strtoupper($ordenar), ['ASC', 'DESC'])) {
-                throw new Exception('Orden no válido');
-            }
-
             //Nº de productos por página
             $registros = 6;
 
@@ -146,10 +142,7 @@ class GestorProductos
             }
 
             $condiciones_sql = implode(' AND ', $condiciones);
-            $query = "SELECT COUNT(*) 
-                      FROM productos 
-                      JOIN subfamilias ON productos.id_subfamilia = subfamilias.id_subfamilia
-                      WHERE $condiciones_sql";
+            $query = "SELECT COUNT(*) FROM productos JOIN subfamilias ON productos.id_subfamilia = subfamilias.id_subfamilia WHERE $condiciones_sql";
 
             //Consulta para contar los productos
             $stmt = $this->pdo->prepare($query);
@@ -167,12 +160,20 @@ class GestorProductos
             $num_total_registros = $stmt->fetchColumn();
             $total_paginas = ceil($num_total_registros / $registros);
 
+            // Determinar el campo por el que se va a ordenar
+            $campo_orden = 'productos.nombre';  // Por defecto ordenar por nombre
+
+            // Si el parámetro 'ordenar' es por precio, cambia el campo de ordenación
+            if ($ordenar == 'ASC' || $ordenar == 'DESC') {
+                $campo_orden = 'productos.precio';
+            }
+
             //Obtenemos los productos con los filtros y orden
             $query = "SELECT productos.* 
                       FROM productos 
                       JOIN subfamilias ON productos.id_subfamilia = subfamilias.id_subfamilia
                       WHERE $condiciones_sql
-                      ORDER BY productos.nombre $ordenar LIMIT :inicio, :registros";
+                       ORDER BY $campo_orden $ordenar LIMIT :inicio, :registros";
 
             $stmt = $this->pdo->prepare($query);
 
@@ -337,13 +338,13 @@ class GestorProductos
     public function obtener_familias($codigo_producto)
     {
         try {
-            $sql = "SELECT f.nombre AS familia_nombre
+            $query = "SELECT f.nombre AS familia_nombre
                 FROM familias f
                 INNER JOIN subfamilias sf ON sf.id_familia = f.id_familia
                 INNER JOIN productos p ON p.id_subfamilia = sf.id_subfamilia
                 WHERE p.codigo = :codigo_producto";
 
-            $stmt = $this->pdo->prepare($sql);
+            $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(':codigo_producto', $codigo_producto);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -373,8 +374,6 @@ class GestorProductos
         }
     }
 
-
-
     public function obtener_subfamilias_visor()
     {
         try {
@@ -389,4 +388,17 @@ class GestorProductos
             throw new Exception('Error al obtener subfamilias: ' . $e->getMessage());
         }
     }
+
+    public function top_ventas()
+    {
+        try {
+            $query = "SELECT codigo_producto, SUM(cantidad) AS total_vendido FROM lineas_pedido GROUP BY codigo_producto ORDER BY total_vendido desc limit 5";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            throw new Exception('Error al obtener top ventas: ' . $e->getMessage());
+        }
+    }
+
 }

@@ -1,4 +1,5 @@
 <div class="container-fluid">
+
     <?php
     // Obtener el valor del parámetro 'buscar_producto' si está presente
     $buscar_producto = isset($_GET['buscar_producto']) ? trim($_GET['buscar_producto']) : '';
@@ -11,6 +12,21 @@
 
     if (!empty($productos)) :
     ?>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <form method="GET" class="d-flex">
+                <!-- Mantener los valores actuales -->
+                <input type="hidden" name="buscar_producto" value="<?php echo htmlspecialchars($buscar_producto); ?>">
+                <input type="hidden" name="familia" value="<?php echo htmlspecialchars($familia); ?>">
+                <input type="hidden" name="subfamilia" value="<?php echo htmlspecialchars($subfamilia); ?>">
+
+                <!-- Selección para ordenar los productos -->
+                <select name="ordenar" class="form-select" onchange="this.form.submit()">
+                    <option value="ASC" <?php echo $ordenar == 'ASC' ? 'selected' : ''; ?>>Precio: Menor a Mayor</option>
+                    <option value="DESC" <?php echo $ordenar == 'DESC' ? 'selected' : ''; ?>>Precio: Mayor a Menor</option>
+                </select>
+            </form>
+        </div>
+
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             <?php foreach ($productos as $producto): ?>
                 <?php if ($producto->getActivo() === 1): ?>
@@ -73,31 +89,31 @@
                     'subfamilia' => $subfamilia
                 ]);
                 ?>
-          
-                    <!-- Botón "Anterior" -->
-                    <?php if ($pagina_actual > 1): ?>
-                        <a href="?pagina=<?php echo $pagina_actual - 1; ?>&<?php echo $parametros_paginacion; ?>"
-                            class="btn btn-outline-primary btn-lg rounded-pill me-3 shadow-sm">
-                            <i class="bi bi-arrow-left"></i> Anterior
-                        </a>
-                    <?php endif; ?>
 
-                    <!-- Páginas numeradas -->
-                    <?php for ($pagina = 1; $pagina <= $total_paginas; $pagina++): ?>
-                        <a href="?pagina=<?php echo $pagina; ?>&<?php echo $parametros_paginacion; ?>"
-                            class="btn btn-outline-primary btn-lg rounded-pill me-2 <?php echo ($pagina == $pagina_actual) ? 'active' : ''; ?>">
-                            <?php echo $pagina; ?>
-                        </a>
-                    <?php endfor; ?>
+                <!-- Botón "Anterior" -->
+                <?php if ($pagina_actual > 1): ?>
+                    <a href="?pagina=<?php echo $pagina_actual - 1; ?>&<?php echo $parametros_paginacion; ?>"
+                        class="btn btn-outline-primary btn-lg rounded-pill me-3 shadow-sm">
+                        <i class="bi bi-arrow-left"></i> Anterior
+                    </a>
+                <?php endif; ?>
 
-                    <!-- Botón "Siguiente" -->
-                    <?php if ($pagina_actual < $total_paginas): ?>
-                        <a href="?pagina=<?php echo $pagina_actual + 1; ?>&<?php echo $parametros_paginacion; ?>"
-                            class="btn btn-outline-primary btn-lg rounded-pill ms-3 shadow-sm">
-                            Siguiente <i class="bi bi-arrow-right"></i>
-                        </a>
-                    <?php endif; ?>
-                
+                <!-- Páginas numeradas -->
+                <?php for ($pagina = 1; $pagina <= $total_paginas; $pagina++): ?>
+                    <a href="?pagina=<?php echo $pagina; ?>&<?php echo $parametros_paginacion; ?>"
+                        class="btn btn-outline-primary btn-lg rounded-pill me-2 <?php echo ($pagina == $pagina_actual) ? 'active' : ''; ?>">
+                        <?php echo $pagina; ?>
+                    </a>
+                <?php endfor; ?>
+
+                <!-- Botón "Siguiente" -->
+                <?php if ($pagina_actual < $total_paginas): ?>
+                    <a href="?pagina=<?php echo $pagina_actual + 1; ?>&<?php echo $parametros_paginacion; ?>"
+                        class="btn btn-outline-primary btn-lg rounded-pill ms-3 shadow-sm">
+                        Siguiente <i class="bi bi-arrow-right"></i>
+                    </a>
+                <?php endif; ?>
+
             <?php endif; ?>
         </div>
 

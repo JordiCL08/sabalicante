@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__ . '/../config/funciones.php');
 include_once 'gestor_productos.php';
 class Pedido
 {
@@ -12,7 +13,9 @@ class Pedido
 
     private $forma_pago;
 
-    public function __construct($id_pedido, $id_usuario, $fecha_pedido, $estado_pedido, $total_pedido, $forma_pago)
+    private $recogida_local;
+
+    public function __construct($id_pedido, $id_usuario, $fecha_pedido, $estado_pedido, $total_pedido, $forma_pago,$recogida_local)
     {
         $this->id_pedido = $id_pedido;
         $this->id_usuario = $id_usuario;
@@ -20,6 +23,7 @@ class Pedido
         $this->estado_pedido = $estado_pedido;
         $this->total_pedido = $total_pedido;
         $this->forma_pago = $forma_pago;
+        $this->recogida_local = $recogida_local;
     }
 
     public function getIdPedido()
@@ -46,6 +50,11 @@ class Pedido
     {
         return $this->forma_pago;
     }
+
+    public function getRecogidaLocal()
+    {
+        return $this->recogida_local;
+    }
 }
 
 class GestorPedidos
@@ -57,13 +66,15 @@ class GestorPedidos
         $this->pdo = $pdo;
     }
     //Agregar un pedido
-    public function agregar_pedido($id_usuario, $total, $forma_pago)
+    public function agregar_pedido($id_usuario, $total, $forma_pago,$gastos_envio,$recogida_local)
     {
-        $query = "INSERT INTO pedidos (id_usuario, fecha, total, forma_pago) VALUES (:id_usuario, NOW(), :total, :forma_pago)";
+        $total_con_envio = $total + $gastos_envio;
+        $query = "INSERT INTO pedidos (id_usuario, fecha, total, forma_pago,recogida_local) VALUES (:id_usuario, NOW(), :total, :forma_pago ,:recogida_local)";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
-        $stmt->bindParam(':total', $total);
+        $stmt->bindParam(':total', $total_con_envio);
         $stmt->bindParam(':forma_pago', $forma_pago, PDO::PARAM_STR);
+        $stmt->bindParam(':recogida_local', $recogida_local, PDO::PARAM_BOOL);
         $stmt->execute();
 
         // Devuelve el ID del ultimo pedido
@@ -129,12 +140,12 @@ class GestorPedidos
     public function mostrar_pedidos()
     {
         // Consulta para obtener todos los pedidos
-        $query = "SELECT id_pedido, id_usuario, fecha, estado, total FROM pedidos";
+        $query = "SELECT id_pedido, id_usuario, fecha, estado, total,recogida_local FROM pedidos";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         // Obtener todos los pedidos
         $pedidos = $stmt->fetchAll(PDO::FETCH_OBJ);
-        // Calcular el total de páginas (por ejemplo, asumiendo 10 resultados por página)
+        // Calcular el total de páginas 
         $total_registros = count($pedidos);
         $registros_por_pagina = 10;
         $total_paginas = ceil($total_registros / $registros_por_pagina);
@@ -146,21 +157,24 @@ class GestorPedidos
 
     public function obtener_lineas_pedido($id_pedido)
     {
-        $query = "SELECT p.codigo, p.nombre, p.descripcion, p.imagen, lp.cantidad, lp.precio_unitario, lp.subtotal
-                FROM lineas_pedido lp
-                JOIN productos p ON lp.codigo_producto = p.codigo
-                WHERE lp.id_pedido = :id_pedido";
+        $query = "SELECT p.codigo, p.nombre, p.descripcion, p.imagen, lp.cantidad, lp.precio_unitario, lp.subtotal, pd.recogida_local
+                  FROM lineas_pedido lp
+                  JOIN productos p ON lp.codigo_producto = p.codigo
+                  JOIN pedidos pd ON lp.id_pedido = pd.id_pedido
+                  WHERE lp.id_pedido = :id_pedido";
+        
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function verificar_stock($codigo_producto, $cantidad_solicitada)
     {
         // Consultamos el stock disponible en la base de datos
-        $sql = "SELECT stock FROM productos WHERE codigo = :codigo_producto";
-        $stmt = $this->pdo->prepare($sql);
+        $query = "SELECT stock FROM productos WHERE codigo = :codigo_producto";
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute([':codigo_producto' => $codigo_producto]);
         $producto = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$producto || $producto['stock'] < $cantidad_solicitada) {
@@ -171,8 +185,8 @@ class GestorPedidos
     }
 
     public function stock_actual($codigo_producto) {
-        $sql = "SELECT stock FROM productos WHERE codigo = :codigo_producto";
-        $stmt = $this->pdo->prepare($sql);
+        $query = "SELECT stock FROM productos WHERE codigo = :codigo_producto";
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute([':codigo_producto' => $codigo_producto]);
         return $stmt->fetch(PDO::FETCH_ASSOC);  
     }

@@ -36,8 +36,10 @@ if (isset($_GET['id_familia'])) {
             $borrar_familia = $gestorFamilias->borrar_familia($id_familia); // Asegúrate de pasar solo el código
 
             if ($borrar_familia) {
+                escribir_log("Familia con id: $id_familia eliminada por el usuario ". $_SESSION['usuario'],'familias');
                 $_SESSION['mensaje'] = "Familia con id: $id_familia eliminada correctamente.";
             } else {
+                escribir_log("Hubo un intento de borrado de familia con id: $id_familia por el usuario ". $_SESSION['usuario'],'familias');
                 $_SESSION['errores'][] = "Error al eliminar la familia: $nombre_familia.";
             }
 

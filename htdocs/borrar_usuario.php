@@ -1,12 +1,12 @@
 <?php
 include_once 'gestores/gestor_usuarios.php';
-include_once 'config/funciones.php';
 include_once 'config/conectar_db.php';
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' ) {
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
+    escribir_log("Intento de acceso en zona de eliminación de usuarios por el usuario ". $_SESSION['usuario'],'acceso');
     header("Location: index.php");
     exit;
 }
@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
     $id = trim($_GET['id']);  //eliminar espacios extra
 
     $usuario = $gestorUsuarios->obtener_usuario_por_id($id);
-
+    $datos_usuario = $usuario->getNombre() . " " . $usuario->getApellidos() . " con DNI: " . $usuario->getDni();
     if (!$usuario) {
         //Usuario no encontrado, redirigir con mensaje de error
         $_SESSION['errores'][] = "Usuario con id $id no encontrado.";
@@ -28,6 +28,7 @@ if (isset($_GET['id'])) {
     // Verificar si el usuario logueado es el mismo que el usuario o si es un administrador
     if ($_SESSION['rol'] !== 'Administrador' && $_SESSION['id'] !== $usuario->getId()) {
         //Si no es administrador y no es el propio usuario, no tiene permisos para eliminar
+        escribir_log("Hubo un intento de borrado del usuario  : $datos_usuario  :: Por el usuario " . $_SESSION['usuario'], 'usuarios');
         $_SESSION['errores'][] = "No tiene permisos para eliminar a este usuario.";
         header("Location: index.php");
         exit();
@@ -39,13 +40,16 @@ if (isset($_GET['id'])) {
         $borrar_usuario = $gestorUsuarios->borrar_usuario($usuario->getId());
         $usuario_DNI = $usuario->getDni();
         if ($borrar_usuario) {
+            escribir_log("El usuario: $datos_usuario  fue eliminado por el usuario " . $_SESSION['usuario'], 'usuarios');
             $_SESSION['mensaje'] = "Usuario con DNI:  $usuario_DNI eliminado correctamente.";
         } else {
+            escribir_log("Hubo un intento de elimnación del usuario: $datos_usuario  por el usuario " . $_SESSION['usuario'], 'usuarios');
             $_SESSION['errores'][] = "Error al eliminar el usuario con DNI:  $usuario_DNI.";
         }
 
         // Redirigir dependiendo del rol
         if ($_SESSION['rol'] !== 'Administrador') {
+            escribir_log("Intento de acceso en zona de eliminación de usuarios por el usuario". $_SESSION['usuario'],'acceso');
             session_destroy();
             header("Location:index.php");
             exit();

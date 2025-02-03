@@ -155,9 +155,6 @@ class GestorUsuarios
     public function mostrar_usuarios($buscar = '', $ordenar = 'ASC')
     {
         try {
-            if (!in_array(strtoupper($ordenar), ['ASC', 'DESC'])) {
-                throw new Exception('Error');
-            }
             $registros = 10;
             $pagina = isset($_GET["pagina"]) && is_numeric($_GET["pagina"]) && $_GET["pagina"] > 0 ? (int)$_GET["pagina"] : 1;
             $inicio = ($pagina - 1) * $registros;
@@ -369,8 +366,8 @@ class GestorUsuarios
     }
 
     public function baja_usuario($id_usuario) {
-        $sql = "UPDATE usuarios SET activo = 0 WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
+        $query = "UPDATE usuarios SET activo = 0 WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id', $id_usuario, PDO::PARAM_INT);
         return $stmt->execute();
     }

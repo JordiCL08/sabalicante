@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], "imagenes/" . $nombre_imagen)) {
             $imagen = $nombre_imagen; // Asignar el nuevo nombre de la imagen
         } else {
+            escribir_log("Error al subir la imagen del producto: $codigo por el usuario: " . $_SESSION['usuario'], 'productos');
             $errores[] = "Error al subir la imagen.";
         }
     }
@@ -71,11 +72,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
             // Intentar editar el producto
             $resultado = $gestorProductos->editar_producto($producto);
             if ($resultado) {
+                if ($activo == false) {
+                    escribir_log("Producto con código: $codigo desactivado por el usuario " . $_SESSION['usuario'], 'productos');
+                } else {
+                    escribir_log("Producto con código: $codigo activado por el usuario " . $_SESSION['usuario'], 'productos');
+                }
+                escribir_log("Producto con código: $codigo  editado por el usuario " . $_SESSION['usuario'], 'productos');
                 $_SESSION['mensaje'] = "Producto editado correctamente.";
                 header('Location: mantenimiento_productos.php');
                 exit();
             }
         } catch (PDOException $e) {
+            escribir_log("Error al editar el prodcuto con código: $codigo por el usuario " . $_SESSION['usuario'], 'productos');
             $errores[] = "Error al actualizar los datos: " . $e->getMessage();
         }
     }

@@ -4,8 +4,8 @@ if (!empty($_SESSION['acceso'])) {
     header("Location:acceso.php");
     exit;
 } //
-require_once "config/funciones.php";
 require_once "gestores/gestor_usuarios.php";
+require_once "gestores/gestor_carritos.php";
 require_once "config/conectar_db.php";
 
 /*+++++++++++++++++++++++++++++++++++++++++
@@ -35,6 +35,7 @@ if (isset($_POST["entrar"])) {
             if ($resultado) {
                 // Verificar si la cuenta está activa
                 if (isset($resultado['activo']) && $resultado['activo'] === 0) {
+                    escribir_log("Hubo un intento acceso de un usuario desactivado-> $usuario.", 'acceso');
                     $alerta_usuario_desactivado = "El usuario está desactivado, ponte en contacto con admin@sabalicante.com.";
                 } else {
                     // Verificar la contraseña
@@ -46,7 +47,9 @@ if (isset($_POST["entrar"])) {
                         $_SESSION['rol'] = $resultado['rol'];
                         $_SESSION['nombre'] = $resultado['nombre'];
                         //mensaje bienvenida
-                        $_SESSION['mensaje'] = "Bienvendi@ ". $_SESSION['nombre'];
+                        $_SESSION['mensaje'] = "Bienvendi@ " . $_SESSION['nombre'];
+                        //Carga el carrito del usuario
+                        cargar_carrito($_SESSION['id']);
                         // Redirigir al usuario a la página principal
                         header("Location: index.php");
                         exit;
@@ -55,6 +58,7 @@ if (isset($_POST["entrar"])) {
                     }
                 }
             } else {
+                escribir_log("Hubo un intento acceso de un usuario no registrado.", 'acceso');
                 $errores[] = "El usuario no está registrado.";
             }
         } catch (PDOException $e) {
