@@ -30,3 +30,10 @@
 [2025-02-04 13:35:59] Estado del pedido con ID: 22 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Cancelado.
 [2025-02-04 13:36:08] Estado del pedido con ID: 22 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Pagado.
 [2025-02-04 19:44:25] ID Pedido: 25 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-04 20:41:15] ID Pedido: 26 completado con exito por el usuario: j@j.com
+[2025-02-04 20:45:39] ID Pedido: 27 completado con exito por el usuario: j@j.com
+[2025-02-04 20:46:58] ID Pedido: 28 completado con exito por el usuario: j@j.com
+[2025-02-04 20:49:48] ID Pedido: 29 completado con exito por el usuario: j@j.com
+[2025-02-04 21:00:22] ID Pedido: 30 completado con exito por el usuario: j@j.com
+[2025-02-04 21:04:01] ID Pedido: 31 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-04 21:06:14] ID Pedido: 32 completado con exito por el usuario: anavegaca@hotmail.com

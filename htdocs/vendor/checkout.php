@@ -1,12 +1,35 @@
 <?php
 session_start();
+include_once(__DIR__ . '/../gestores/gestor_usuarios.php');
 include_once(__DIR__ . '/../config/funciones.php');
+include_once(__DIR__ . '/../config/conectar_db.php');
 require __DIR__ . "/autoload.php";
+
 // Clave secreta de Stripe
 $stripe_clave_privada = 'sk_test_51QiKchJtRHNFpLrqrlz8wUaTzQmtmdRzfwviJyQxVVBSmVHmfgRgPR7vA3lwcWXZsTP3JbRF3SjGYM2rzW81f0S100fyf207Zt';
 \Stripe\Stripe::setApiKey($stripe_clave_privada);
+
 //Carrito desde la sesión
 $carrito = $_SESSION['carrito'];
+
+//INTRODUCIMOS LOS DATOS DE ENVIO QUE SACAMOS DEL FORMULARIO DE PAGO(EN CASO DE QUE NO TENGA DATOS DE ENVIO O SE CAMBIEN)
+$pdo = conectar_db();
+$gestorUsuarios = new GestorUsuarios($pdo);
+$ID_usuario = $_SESSION['id'];
+$usuarioDetalles = $gestorUsuarios->obtener_usuario_por_id($ID_usuario);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $direccion = $_POST['direccion'];
+    $provincia = $_POST['provincia'];
+    $localidad = $_POST['localidad'];
+    $cp = $_POST['cp'];
+    //seteamos los datos
+    $usuarioDetalles->setDireccion($direccion);
+    $usuarioDetalles->setProvincia($provincia);
+    $usuarioDetalles->setLocalidad($localidad);
+    $usuarioDetalles->setCp($cp);
+    //Actualizamos los datos de envio del usuario
+    $gestorUsuarios->editar_usuario($usuarioDetalles);
+}
 
 //Verifica si se ha enviado el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

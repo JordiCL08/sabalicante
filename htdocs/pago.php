@@ -14,7 +14,6 @@ if (isset($ID_usuario)) {
     header('Location: login.php');
     exit();
 }
-
 ?>
 <?php include_once "includes/header.php"; ?>
 

@@ -78,7 +78,7 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                             <?php endif; ?>
 
                             <!-- Gestión de Familias -->
-                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'Administrador'): ?>
+                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'Administrador' || $_SESSION['rol'] === 'Empleado'): ?>
                                 <li class="nav-item">
                                     <a class="nav-link" href="mantenimiento_familias.php">Gestión de Familias</a>
                                 </li>

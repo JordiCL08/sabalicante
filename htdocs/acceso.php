@@ -1,9 +1,9 @@
 <?php
 session_start();
-if (!empty($_SESSION['acceso'])) {
-    header("Location:acceso.php");
+if (isset($_SESSION['acceso']) && $_SESSION['acceso'] === true) {
+    header("Location: index.php");
     exit;
-} //
+}
 require_once "gestores/gestor_usuarios.php";
 require_once "gestores/gestor_carritos.php";
 require_once "config/conectar_db.php";

@@ -4,25 +4,26 @@ function cargar_carrito($id_usuario)
 {
     global $pdo;
 
+    // Si el usuario ya tiene productos en el carrito de la sesión
+    $carrito_sesion = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
+
     // Cargar los productos del carrito desde la base de datos
     $query = "SELECT * FROM carritos WHERE id_usuario = :id_usuario";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
     $stmt->execute();
 
-    //Iniciamos el carrito en la sesión
+    // Crear un nuevo carrito para el usuario logueado
     $_SESSION['carrito'] = [];
 
-    // Recorrer los productos del carrito y cargar su contenido
+    //Recorrer los productos del carrito del usuario y cargar su contenido
     while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Obtener los detalles del producto
         $query_producto = "SELECT * FROM productos WHERE codigo = :codigo";
         $stmt_producto = $pdo->prepare($query_producto);
         $stmt_producto->bindParam(':codigo', $producto['codigo_producto'], PDO::PARAM_STR);
         $stmt_producto->execute();
         $producto_detalle = $stmt_producto->fetch(PDO::FETCH_ASSOC);
-
-        // Añadir el producto al carrito en la sesión
+        // Añadir el producto al carrito de la sesión
         $_SESSION['carrito'][] = [
             'codigo' => $producto['codigo_producto'],
             'nombre' => $producto_detalle['nombre'],
@@ -33,6 +34,23 @@ function cargar_carrito($id_usuario)
             'descuento' => $producto_detalle['descuento'] ?? 0,
             'precio_final' => $producto_detalle['precio'] * (1 - ($producto_detalle['descuento'] ?? 0) / 100)
         ];
+    }
+
+    foreach ($carrito_sesion as $producto_sesion) {
+        //Verificar si el producto ya está en el carrito del usuario
+        $encontrado = false;
+        foreach ($_SESSION['carrito'] as &$producto_usuario) {
+            if ($producto_usuario['codigo'] === $producto_sesion['codigo']) {
+                // Si el producto ya está en el carrito, sumamos la cantidad
+                $producto_usuario['cantidad'] += $producto_sesion['cantidad'];
+                $encontrado = true;
+                break;
+            }
+        }
+        // Si no se encontró el producto en el carrito, se añade como nuevo
+        if (!$encontrado) {
+            $_SESSION['carrito'][] = $producto_sesion;
+        }
     }
 }
 

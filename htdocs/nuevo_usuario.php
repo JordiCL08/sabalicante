@@ -10,12 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recolección de datos del formulario
     $dni = trim($_POST['dni']);
     $nombre = trim($_POST['nombre']);
-    $apellidos = trim($_POST['apellidos']);
-    $direccion = trim($_POST['direccion']);
-    $cp = trim($_POST['cp']);
-    $localidad = trim($_POST['localidad']);
-    $provincia = trim($_POST['provincia']);
     $telefono = trim($_POST['telefono']);
+    $apellidos = trim($_POST['apellidos']);
     $email = trim($_POST['email']);
     $clave = trim($_POST['clave']);
     $confirmar_clave = trim($_POST['confirmar_clave']);
@@ -24,8 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validar campos requeridos
     if (
-        empty($dni) || empty($nombre) || empty($direccion) || empty($localidad) ||
-        empty($provincia) || empty($telefono) || empty($email) || empty($clave)  || empty($apellidos)
+        empty($dni) || empty($nombre) || empty($telefono) || empty($email) || empty($clave)  || empty($apellidos)
     ) {
         $errores[] = "Todos los campos son obligatorios.";
     }
@@ -82,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si no hay errores, registrar al cliente
     if (empty($errores)) {
         try {
-            $usuario = new Usuario(null, $clave, $dni, $nombre, $apellidos, $direccion, $localidad, $provincia, $cp, $telefono, $email, 'usuario', 1);
+            $usuario = new Usuario(null, $clave, $dni, $nombre, $apellidos, '', '', '','' , $telefono, $email, 'usuario', 1);
             $resultado = $gestorUsuarios->crear_usuario($usuario);
 
             if ($resultado) {
@@ -123,48 +118,22 @@ include_once "includes/header.php";
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="needs-validation" novalidate>
                 <!-- Datos personales -->
                 <h4 class="mb-3">Datos personales</h4>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="dni" class="form-label">DNI:</label>
                         <input type="text" id="dni" name="dni" class="form-control" pattern="[0-9]{8}[A-Za-z]{1}" title="Debe poner 8 números y una letra." maxlength="9" placeholder="Ej: 12345678A" required>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre completo" required>
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="apellidos" class="form-label">Apellidos:</label>
                         <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Apellidos" required>
                     </div>
                 </div>
-
-                <h4 class="mb-3">Dirección</h4>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="direccion" class="form-label">Dirección:</label>
-                        <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Calle, número, etc." required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="localidad" class="form-label">Localidad:</label>
-                        <input type="text" id="localidad" name="localidad" class="form-control" placeholder="Localidad" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="provincia" class="form-label">Provincia:</label>
-                        <input type="text" id="provincia" name="provincia" class="form-control" placeholder="Provincia" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="cp" class="form-label">Código Postal:</label>
-                        <input type="text" id="cp" name="cp" class="form-control" maxlength="5" placeholder="Código Postal" required>
-                    </div>
-                </div>
-
                 <h4 class="mb-3">Contacto</h4>
                 <div class="row">
                     <div class="col-md-6 mb-3">
