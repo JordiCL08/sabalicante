@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once(__DIR__ . '/../config/conectar_db.php');
+include_once(__DIR__ . '../config/conectar_db.php');
 include_once 'gestores/gestor_pedidos.php';
 include_once 'gestores/gestor_usuarios.php';
 
