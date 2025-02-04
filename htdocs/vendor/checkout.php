@@ -12,27 +12,27 @@ $stripe_clave_privada = 'sk_test_51QiKchJtRHNFpLrqrlz8wUaTzQmtmdRzfwviJyQxVVBSmV
 //Carrito desde la sesión
 $carrito = $_SESSION['carrito'];
 
-//INTRODUCIMOS LOS DATOS DE ENVIO QUE SACAMOS DEL FORMULARIO DE PAGO(EN CASO DE QUE NO TENGA DATOS DE ENVIO O SE CAMBIEN)
+//INTRODUCIMOS LOS DATOS DE ENVIO/FACTURACION QUE SACAMOS DEL FORMULARIO DE PAGO(EN CASO DE QUE NO TENGA DATOS DE ENVIO O SE CAMBIEN)
 $pdo = conectar_db();
 $gestorUsuarios = new GestorUsuarios($pdo);
 $ID_usuario = $_SESSION['id'];
 $usuarioDetalles = $gestorUsuarios->obtener_usuario_por_id($ID_usuario);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $direccion = $_POST['direccion'];
-    $provincia = $_POST['provincia'];
-    $localidad = $_POST['localidad'];
-    $cp = $_POST['cp'];
-    //seteamos los datos
-    $usuarioDetalles->setDireccion($direccion);
-    $usuarioDetalles->setProvincia($provincia);
-    $usuarioDetalles->setLocalidad($localidad);
-    $usuarioDetalles->setCp($cp);
-    //Actualizamos los datos de envio del usuario
-    $gestorUsuarios->editar_usuario($usuarioDetalles);
-}
-
-//Verifica si se ha enviado el formulario
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    //datos de envio
+    if ($_POST['direccion']) {
+        $direccion = $_POST['direccion'];
+        $provincia = $_POST['provincia'];
+        $localidad = $_POST['localidad'];
+        $cp = $_POST['cp'];
+        //seteamos los datos
+        $usuarioDetalles->setDireccion($direccion);
+        $usuarioDetalles->setProvincia($provincia);
+        $usuarioDetalles->setLocalidad($localidad);
+        $usuarioDetalles->setCp($cp);
+        //Actualizamos los datos de envio del usuario
+        $gestorUsuarios->editar_usuario($usuarioDetalles);
+    }
+    //FORMA DE PAGO
     $forma_pago = $_POST['forma_pago'];
     $gastos_envio = $_POST['gastos_envio'];
     $_SESSION['forma_pago'] = $forma_pago;

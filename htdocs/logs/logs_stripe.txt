@@ -8,3 +8,4 @@
 [2025-02-02 20:36:52] El pago del pedido ha pasado por stripe
 [2025-02-03 22:48:51] El pago del pedido ha pasado por stripe
 [2025-02-04 13:33:56] El pago del pedido ha pasado por stripe
+[2025-02-04 21:26:06] El pago del pedido ha pasado por stripe

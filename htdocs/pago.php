@@ -34,11 +34,9 @@ if (isset($ID_usuario)) {
                         <option value="recoger_tienda">Recoger en Tienda</option>
                     </select>
                 </div>
-                <!-- Gastos de Envío -->
-                <div id="envio_domicilio" class="mb-4">
                     <!-- Sección para la Dirección de Entrega -->
                     <div class="mb-4">
-                        <h3 class="text-primary">Dirección de Entrega</h3>
+                        <h3 class="text-primary">Dirección de Entrega/Facturación</h3>
                         <!-- Calle -->
                         <div class="mb-3">
                             <label for="direccion" class="form-label">Dirección</label>
@@ -60,11 +58,12 @@ if (isset($ID_usuario)) {
                             <input type="text" class="form-control" id="cp" name="cp" value="<?php echo htmlspecialchars($usuarioDetalles->getCp()); ?>" required>
                         </div>
                     </div>
+                <!-- Gastos de Envío -->
+                <div id="gastos_envio_aplicados" class="mb-4" style="display:none;">
                     <h4><span id="precio-envio">€5.00</span> Gastos de Envío</h4>
                     <!-- Campo oculto para los gastos de envío -->
                     <input type="hidden" id="gastos_envio" name="gastos_envio" value="5.00">
                 </div>
-
                 <!-- Selección de Forma de Pago -->
                 <div class="mb-4">
                     <label for="forma-pago" class="form-label">Forma de Pago</label>
@@ -111,12 +110,11 @@ if (isset($ID_usuario)) {
     document.addEventListener('DOMContentLoaded', function() {
         const forma_pago_seleccionada = document.getElementById('forma-pago');
         const metodo_envio_seleccionado = document.getElementById('metodo-envio');
-        const gastos_envio = document.getElementById('envio_domicilio');
         const precio_envio = document.getElementById('precio-envio');
         const tarjeta_info = document.getElementById('tarjeta-info');
         const transferencia_info = document.getElementById('transferencia-info');
         const efectivo_info = document.getElementById('efectivo-info');
-
+        const gastos_envio = document.getElementById('gastos_envio_aplicados');
         // Función para mostrar el mensaje según la forma de pago
         function seleccion_formulario(forma_de_pago) {
             tarjeta_info.style.display = 'none';
@@ -138,11 +136,11 @@ if (isset($ID_usuario)) {
 
         function actualizar_gastos_envio(metodo_envio) {
             if (metodo_envio === 'recoger_tienda') {
-                gastos_envio.style.display = 'none'; // No mostrar gastos si es recoger en tienda
-                document.getElementById('gastos_envio').value = '0.00'; //No hay gastos de envío
+                gastos_envio.style.display = 'none'; // No mostrar gastos si es "Recoger en Tienda"
+                document.getElementById('gastos_envio').value = '0.00'; // No hay gastos de envío
             } else {
-                gastos_envio.style.display = 'block'; // Mostrar gastos si es envío a domicilio
-                precio_envio.textContent = '€5.00';
+                gastos_envio.style.display = 'block'; // Mostrar gastos si es "Envío a Domicilio"
+                precio_envio.textContent = '€5.00'; // Establecer los gastos de envío
                 document.getElementById('gastos_envio').value = '5.00'; // Asignamos los gastos al campo oculto
             }
         }
