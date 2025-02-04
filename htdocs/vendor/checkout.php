@@ -3,7 +3,7 @@ session_start();
 include_once(__DIR__ . '/../config/funciones.php');
 require __DIR__ . "/autoload.php";
 // Clave secreta de Stripe
-$stripe_clave_privada = 'clave privada que de stripe';
+$stripe_clave_privada = 'sk_test_51QiKchJtRHNFpLrqrlz8wUaTzQmtmdRzfwviJyQxVVBSmVHmfgRgPR7vA3lwcWXZsTP3JbRF3SjGYM2rzW81f0S100fyf207Zt';
 \Stripe\Stripe::setApiKey($stripe_clave_privada);
 //Carrito desde la sesión
 $carrito = $_SESSION['carrito'];

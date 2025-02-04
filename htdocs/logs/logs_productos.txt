@@ -10,3 +10,7 @@
 [2025-02-01 21:40:42] Producto : Pruebass dado de alta con exito por el usuario: Jordicodeviladl@gmail.com
 [2025-02-03 21:24:50] Producto con código: MNC02122 activado por el usuario Jordicodeviladl@gmail.com
 [2025-02-03 21:24:50] Producto con código: MNC02122  editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 19:19:47] Producto : PRUEBAAA dado de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-04 19:20:05] Producto con código: PRU12312 desactivado por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 19:20:05] Producto con código: PRU12312  editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 19:20:13] Producto con codigo: PPP99999 eliminado por el usuario Jordicodeviladl@gmail.com

@@ -5,3 +5,6 @@
 [2025-02-01 13:35:35] Subamilia : fubbboa dada de alta con exito por el usuario: Jordicodeviladl@gmail.com
 [2025-02-01 15:45:37] Subfamilia con id: 13 eliminada por el usuario Jordicodeviladl@gmail.com
 [2025-02-01 21:40:02] Subamilia : Prueba dada de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-04 19:19:19] Subamilia : pruebas dada de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-04 19:20:20] Subfamilia con id: 14 desactivada por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 19:20:20] Subfamilia con id: 14 editada por el usuario Jordicodeviladl@gmail.com

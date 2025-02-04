@@ -5,9 +5,9 @@
 
 function conectar_db()
 {
-  $hostname  = "localhost";//lo dejo así ya que lo subo en github 
-  $usuario_db = "root";//lo dejo así ya que lo subo en github 
-  $pass_db = "";//lo dejo así ya que lo subo en github 
+  $hostname  = "localhost";
+  $usuario_db = "root";
+  $pass_db = "";
   $db = "if0_37973440_sabalic";
 
   try {

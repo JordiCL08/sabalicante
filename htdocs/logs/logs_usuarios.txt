@@ -9,3 +9,7 @@
 [2025-02-01 14:21:41] El usuario con DNI: 48673889r ha cambiado la contraseña con exito.
 [2025-02-03 21:24:39] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido activado por el usuario Jordicodeviladl@gmail.com
 [2025-02-03 21:24:39] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido editado por el usuario Jordicodeviladl@gmail.com
+[2025-02-03 22:47:55] El usuario José creado correctamente por el usuario: José
+[2025-02-04 13:31:23] El usuario Raul creado correctamente por el usuario: Raul
+[2025-02-04 13:39:12] El usuario paixop@hotmail.com con DNI: 74241484Z ha sido desactivado por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 13:39:12] El usuario paixop@hotmail.com con DNI: 74241484Z ha sido editado por el usuario Jordicodeviladl@gmail.com

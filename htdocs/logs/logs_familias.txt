@@ -6,3 +6,6 @@
 [2025-02-01 13:31:52] Familia con id: 7 eliminada por el usuario Jordicodeviladl@gmail.com
 [2025-02-01 13:32:05] Familia : prueba n fam dada de alta con exito por el usuario: Jordicodeviladl@gmail.com
 [2025-02-01 15:45:43] Familia con id: 8 eliminada por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 19:19:09] Familia : prueba dada de alta con exito por el usuario: Jordicodeviladl@gmail.com
+[2025-02-04 19:20:29] Familia con id: 7 desactivada por el usuario Jordicodeviladl@gmail.com
+[2025-02-04 19:20:29] Familia con id: 7 editada por el usuario Jordicodeviladl@gmail.com

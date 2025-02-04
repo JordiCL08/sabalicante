@@ -17,3 +17,16 @@
 [2025-02-03 21:33:35] Estado del pedido con ID: 1 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Cancelado.
 [2025-02-03 21:33:38] Estado del pedido con ID: 4 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Entregado.
 [2025-02-03 21:33:40] Pedido con ID: 7 ha sido eliminado por el usuario: Jordicodeviladl@gmail.com
+[2025-02-03 22:48:29] ID Pedido: 17 completado con exito por el usuario: jramirez@hotmail.es
+[2025-02-03 22:49:13] ID Pedido: 18 completado con exito por el usuario: jramirez@hotmail.es
+[2025-02-03 22:51:30] ID Pedido: 19 completado con exito por el usuario: jramirez@hotmail.es
+[2025-02-03 22:53:10] Estado del pedido con ID: 19 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Entregado.
+[2025-02-03 22:53:14] Estado del pedido con ID: 18 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Enviado.
+[2025-02-03 22:55:16] ID Pedido: 20 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-03 22:55:40] ID Pedido: 21 completado con exito por el usuario: anavegaca@hotmail.com
+[2025-02-03 22:55:48] El usuario: anavegaca@hotmail.comha cancelado el pedido : Nº 21
+[2025-02-04 13:34:28] ID Pedido: 22 completado con exito por el usuario: paixop@hotmail.com
+[2025-02-04 13:35:45] Estado del pedido con ID: 22 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Enviado.
+[2025-02-04 13:35:59] Estado del pedido con ID: 22 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Cancelado.
+[2025-02-04 13:36:08] Estado del pedido con ID: 22 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Pagado.
+[2025-02-04 19:44:25] ID Pedido: 25 completado con exito por el usuario: anavegaca@hotmail.com
