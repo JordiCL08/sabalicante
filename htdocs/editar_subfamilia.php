@@ -81,7 +81,7 @@ include_once "includes/header.php";
             <?php require_once('config/procesa_errores.php'); ?>
 
             <!-- Formulario -->
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
+            <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
                 <!-- Campo oculto  -->
                 <input type="hidden" name="id_subfamilia" value="<?php echo htmlspecialchars($subfamilia->getIdSubFamilia()); ?>">
 

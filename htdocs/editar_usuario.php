@@ -32,7 +32,6 @@ if (isset($_GET['id'])) {
             exit;
         }
     }
-
     // Obtener el usuario a editar
     $usuario = $gestorUsuario->obtener_usuario_por_id($id);
     if (!$usuario) {
@@ -169,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php require_once 'config/procesa_errores.php'; ?>
             <div class="card shadow-sm">
                 <div class="card-body">
-                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
+                <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
                 <!-- ID ,DNI -->
                         <input type="hidden" name="dni" value="<?php echo htmlspecialchars($usuario->getDni()); ?>">
                         <input type="hidden" name="id" value="<?php echo htmlspecialchars($usuario->getId()); ?>">
