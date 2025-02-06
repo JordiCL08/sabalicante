@@ -4,7 +4,7 @@ include_once "gestores/gestor_familias.php";
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
+if (!isset($_SESSION['acceso']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado')) {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -26,7 +26,7 @@ if (isset($_GET['id_familia'])) {
         header("Location: mantenimiento_familias.php");
         exit();
     }
-
+    //Obtenemos el nombre da la familia
     $nombre_familia = $familia->getNombre();
 
     // Si el código está presente y se confirma la eliminación
@@ -62,10 +62,10 @@ if (isset($_GET['id_familia'])) {
 
 <!-- HTML y confirmación de eliminación -->
 <?php include_once "includes/header.php"; ?>
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <?php require_once 'config/procesa_errores.php'; ?>
     <div class="row flex-grow-1 justify-content-center">
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <div class="container d-flex flex-column justify-content-center align-items-center py-5">
                 <div class="card shadow-lg w-100">
                     <div class="card-header text-white text-center" style="background-color: #6a0ea7;">

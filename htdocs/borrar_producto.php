@@ -4,7 +4,7 @@ include_once "gestores/gestor_productos.php";
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
+if (!isset($_SESSION['acceso']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado')) {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -27,11 +27,11 @@ if (isset($_GET['codigo'])) {
         exit();
     }
 
-    // Si el código está presente y se confirma la eliminación
+    //Si el codigo es correcto y se confirma borramos el productos
     if (isset($_GET['confirmar']) && $_GET['confirmar'] === 'true') {
         try {
-            // Llamar a la función para eliminar el producto de la base de datos
-            $borrar_producto = $gestorProductos->borrar_producto($codigo); // Asegúrate de pasar solo el código
+            // Llamar a la función para eliminar el producto de la base de datos por su código
+            $borrar_producto = $gestorProductos->borrar_producto($codigo); 
 
             if ($borrar_producto) {
                 escribir_log("Producto con codigo: $codigo eliminado por el usuario ". $_SESSION['usuario'],'productos');
@@ -40,8 +40,7 @@ if (isset($_GET['codigo'])) {
                 escribir_log("Hubo un intento de borrado de producto con codigo: $codigo por el usuario". $_SESSION['usuario'],'productos');
                 $_SESSION['errores'][] = "Error al eliminar el producto con código: $codigo.";
             }
-
-            // Redirigir al índice después de intentar eliminar
+            //Volvemos a mantenimiento productos
             header("Location: mantenimiento_productos.php");
             exit;
         } catch (Exception $e) {
@@ -51,7 +50,7 @@ if (isset($_GET['codigo'])) {
         }
     }
 } else {
-    // Si no se proporciona un código, redirigir a la página principal
+    //Si no obtiene el codigo de un producto da eeror
     $_SESSION['errores'][] = "Código de producto no proporcionado.";
     header("Location: mantenimiento_productos.php");
     exit;
@@ -60,10 +59,10 @@ if (isset($_GET['codigo'])) {
 
 <!-- HTML y confirmación de eliminación -->
 <?php include_once "includes/header.php"; ?>
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <?php require_once 'config/procesa_errores.php'; ?>
     <div class="row flex-grow-1 justify-content-center">
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <div class="container d-flex flex-column justify-content-center align-items-center py-5">
                 <div class="card shadow-lg w-100">
                     <div class="card-header text-white text-center" style="background-color: #6a0ea7;">

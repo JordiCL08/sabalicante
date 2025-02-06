@@ -4,7 +4,7 @@ include_once "gestores/gestor_subfamilias.php";
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
+if (!isset($_SESSION['acceso']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado')) {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -12,28 +12,26 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
 $pdo = conectar_db();
 $gestorSubFamilia = new GestorSubFamilias($pdo);
 
-// Verificar si se ha enviado el código de la familia
+//Verificar si se ha enviado el id de la subfamilia
 if (isset($_GET['id_subfamilia'])) {
-    $id_subfamilia = strtoupper(trim($_GET['id_subfamilia'])); // Obtener el código y ponerlo en mayúsculas
-
-    // Obtener  la familia usando el código
+    $id_subfamilia =trim($_GET['id_subfamilia']); // Obtener el id
+    //Obtenemos la subfamilia por el id 
     $subfamilia = $gestorSubFamilia->obtener_subfamilia_id($id_subfamilia);
 
     if (!$subfamilia) {
         // Si no se encuentra  la familia, redirigir con mensaje de error
-        $_SESSION['errores'][] = "Subfamilia con Código: $id_subfamilia no encontrada.";
+        $_SESSION['errores'][] = "Subfamilia con id: $id_subfamilia no encontrada.";
         header("Location: mantenimiento_familias.php");
         exit();
     }
 
     $nombre_subfamilia = $subfamilia->getNombre();
 
-    // Si el código está presente y se confirma la eliminación
+    //Si el código está presente y se confirma la eliminación
     if (isset($_GET['confirmar']) && $_GET['confirmar'] === 'true') {
         try {
-            // Llamar a la función para eliminar la Subfamilia de la base de datos
-            $borrar_subfamilia = $gestorSubFamilia->borrar_subfamilia($id_subfamilia); // Asegúrate de pasar solo el código
-
+            //Llamar a la función para eliminar la Subfamilia de la base de datos
+            $borrar_subfamilia = $gestorSubFamilia->borrar_subfamilia($id_subfamilia); 
             if ($borrar_subfamilia) {
                 escribir_log("Subfamilia con id: $id_subfamilia eliminada por el usuario ". $_SESSION['usuario'],'subfamilias');
                 $_SESSION['mensaje'] = "Subfamilia con id: $id_subfamilia eliminada correctamente.";
@@ -52,8 +50,8 @@ if (isset($_GET['id_subfamilia'])) {
         }
     }
 } else {
-    // Si no se proporciona un código, redirigir a la página principal
-    $_SESSION['errores'][] = "Código de familia no proporcionado.";
+    //Si no recibimos el id nos manda al mantenimiento de subfamilias
+    $_SESSION['errores'][] = "ID de familia no proporcionado.";
     header("Location: mantenimiento_subfamilias.php");
     exit;
 }
@@ -61,10 +59,10 @@ if (isset($_GET['id_subfamilia'])) {
 
 <!-- HTML y confirmación de eliminación -->
 <?php include_once "includes/header.php"; ?>
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <?php require_once 'config/procesa_errores.php'; ?>
     <div class="row flex-grow-1 justify-content-center">
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4 ">
             <div class="container d-flex flex-column justify-content-center align-items-center py-5">
                 <div class="card shadow-lg w-100">
                     <div class="card-header text-white text-center" style="background-color: #6a0ea7;">

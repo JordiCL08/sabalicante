@@ -1,9 +1,7 @@
 <?php
 session_start();
-
 include_once "includes/header.php";
 ?>
-
 <!-- Contenedor principal de la página -->
 <div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <div class="row flex-grow-1">
@@ -65,12 +63,9 @@ include_once "includes/header.php";
                 <!-- Mostrar contenido del pedido si el usuario está logueado -->
                 <section id="detalle-pedido" class="container-fluid my-4">
                     <h2 class="text-center mb-4">Resumen del Pedido</h2>
-                    <?php
-                    // Verificar si hay productos en el carrito
-                    if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])):
-                        $total = 0;
-                        $stock_insuficiente = false;
-                    ?>
+                    <!-- Verificar si hay productos en el carrito -->
+                    <?php if (!empty($_SESSION['carrito'])): ?>
+                    <!-- Mostramos el carrito en el caso de que no este vacío -->
                         <div class="table-responsive">
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -87,14 +82,15 @@ include_once "includes/header.php";
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($_SESSION['carrito'] as $producto): ?>
-                                        <?php
-                                        // Calcular el subtotal del producto
+                                    <?php
+                                    //Inicializamos total en 0
+                                    $total = 0;
+                                    foreach ($_SESSION['carrito'] as $producto):
+                                        //Calculamos el subtotal de cada producto
                                         $subtotal = $producto['cantidad'] * $producto['precio_final'];
                                         $total += $subtotal;
-                                        $_SESSION['total'] = $total;
-
-                                        ?>
+                                        $_SESSION['total'] = $total;//Guardamos el total en una sesión 
+                                    ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($producto['codigo']); ?></td>
                                             <td><?php echo htmlspecialchars($producto['nombre']); ?></td>

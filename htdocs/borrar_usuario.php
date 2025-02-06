@@ -4,7 +4,7 @@ include_once 'config/conectar_db.php';
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador') {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     escribir_log("Intento de acceso en zona de eliminación de usuarios por el usuario ". $_SESSION['usuario'],'acceso');
     header("Location: index.php");
@@ -37,8 +37,8 @@ if (isset($_GET['id'])) {
     // Si el formulario fue enviado con la confirmación de eliminación
     if (isset($_GET['confirmar']) && $_GET['confirmar'] === 'true') {
         // Intentar borrar al cliente
-        $borrar_usuario = $gestorUsuarios->borrar_usuario($usuario->getId());
-        $usuario_DNI = $usuario->getDni();
+        $borrar_usuario = $gestorUsuarios->borrar_usuario($usuario->getId());//Llamamos a la funcion de borrar usuario desde el id del usuario
+        $usuario_DNI = $usuario->getDni();//Obtenemos el DNI del usuario
         if ($borrar_usuario) {
             escribir_log("El usuario: $datos_usuario  fue eliminado por el usuario " . $_SESSION['usuario'], 'usuarios');
             $_SESSION['mensaje'] = "Usuario con DNI:  $usuario_DNI eliminado correctamente.";
@@ -46,7 +46,6 @@ if (isset($_GET['id'])) {
             escribir_log("Hubo un intento de elimnación del usuario: $datos_usuario  por el usuario " . $_SESSION['usuario'], 'usuarios');
             $_SESSION['errores'][] = "Error al eliminar el usuario con DNI:  $usuario_DNI.";
         }
-
         // Redirigir dependiendo del rol
         if ($_SESSION['rol'] !== 'Administrador') {
             escribir_log("Intento de acceso en zona de eliminación de usuarios por el usuario". $_SESSION['usuario'],'acceso');
@@ -63,11 +62,11 @@ if (isset($_GET['id'])) {
 
 <?php include_once "includes/header.php"; ?>
 <!-- Contenedor principal de la página -->
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <?php require_once 'config/procesa_errores.php'; ?>
     <div class="row flex-grow-1 justify-content-center">
         <!-- Contenido principal -->
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <div class="container d-flex flex-column justify-content-center align-items-center py-5">
                 <!-- Mensaje de confirmación de eliminación -->
                 <div class="card shadow-lg w-100" style="max-width: 100%;">

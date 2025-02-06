@@ -5,7 +5,7 @@ include_once 'gestores/gestor_pedidos.php';
 include_once 'gestores/gestor_usuarios.php';
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado' && $_SESSION['rol'] !== 'Contable') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado' && $_SESSION['rol'] !== 'Contable') {
     escribir_log("Error al acceder a la zona de 'Mantenimiento Pedidos' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
@@ -18,7 +18,8 @@ $gestorUsuarios = new GestorUsuarios($pdo);
 
 // Procesar eliminación de pedido
 if (isset($_GET['borrar'])) {
-    $id_pedido = $_GET['borrar'];
+    $id_pedido = $_GET['borrar']; //Obtenemos el id del pedido desde la url al darle a borrar
+    //Llamamos al metodo para eliminar el pedido
     $gestorPedidos->eliminar_pedido($id_pedido);
     header("Location: mantenimiento_pedidos.php?mensaje=pedido_eliminado");
     escribir_log("Pedido con ID: $id_pedido ha sido eliminado por el usuario: " . $_SESSION['usuario'], 'pedidos');
@@ -29,7 +30,9 @@ if (isset($_GET['borrar'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_pedido'], $_POST['estado'])) {
     $id_pedido = $_POST['id_pedido'];
     $estado = $_POST['estado'];
+    //Comprobamos que el estado tenga uno de estos valores
     if (in_array($estado, ['Pendiente', 'Pagado', 'Enviado', 'Cancelado', 'Entregado'])) {
+        //Si es correcto, actualizamos el estado en la base de datos
         $gestorPedidos->actualizar_estado_pedido($id_pedido, $estado);
         header("Location: mantenimiento_pedidos.php?mensaje=estado_actualizado");
         escribir_log("Estado del pedido con ID: $id_pedido ha sido actualizado por el usuario: " . $_SESSION['usuario'] . " al estado: $estado.", 'pedidos');
@@ -37,8 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_pedido'], $_POST['
     }
 }
 include_once 'includes/header.php';
-$buscar_pedido = isset($_GET['buscar_pedido']) ? trim($_GET['buscar_pedido']) : '';
-list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
+$ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'ASC';
+$buscar = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
+$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos($ordenar, $buscar, $pagina);
 ?>
 
 <div class="container-fluid py-5">
@@ -50,8 +55,8 @@ list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
     <!-- Formulario de búsqueda -->
     <form method="GET" action="mantenimiento_pedidos.php" class="mb-4">
         <div class="input-group">
-            <input type="text" id="buscar_pedido" name="buscar_pedido" class="form-control" placeholder="Buscar pedido por nombre..."
-                value="<?php echo htmlspecialchars($buscar_pedido); ?>" aria-label="Buscar por Pedido">
+            <input type="text" id="buscar" name="buscar" class="form-control" placeholder="Buscar pedido por email..."
+                value="<?php echo htmlspecialchars($buscar); ?>" aria-label="Buscar por Pedido">
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-search"></i> Buscar
             </button>
@@ -67,7 +72,10 @@ list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
             <thead class="table-dark">
                 <tr>
                     <th>ID Pedido</th>
-                    <th>Usuario</th>
+                    <th>Usuario
+                        <a href="?ordenar=ASC&buscar=<?php echo urlencode($buscar); ?>" class="text-decoration-none" aria-label="Ordenar ascendentemente">⬆️</a>
+                        <a href="?ordenar=DESC&buscar=<?php echo urlencode($buscar); ?>" class="text-decoration-none" aria-label="Ordenar descendentemente">⬇️</a>
+                    </th>
                     <th>Fecha Pedido</th>
                     <th>Estado</th>
                     <th>Precio Total</th>
@@ -115,14 +123,13 @@ list($pedidos, $total_paginas) = $gestorPedidos->mostrar_pedidos();
             </tbody>
         </table>
     </div>
-
     <!-- Paginación -->
-    <?php if (empty($buscar_pedido) && $total_paginas > 1): ?>
+    <?php if (empty($buscar) && $total_paginas > 1): ?>
         <nav>
             <ul class="pagination justify-content-center pagination-lg">
                 <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
                     <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?pagina=<?php echo $i; ?>&buscar_pedido=<?php echo urlencode($buscar_pedido); ?>">
+                        <a class="page-link" href="?pagina=<?php echo $i; ?>&buscar=<?php echo urlencode($buscar); ?>&ordenar=<?php echo $ordenar; ?>">
                             <?php echo $i; ?>
                         </a>
                     </li>

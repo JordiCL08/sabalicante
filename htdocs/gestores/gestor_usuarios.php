@@ -88,17 +88,10 @@ class Usuario
     }
 
     // Setters
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+
     public function setClave($clave)
     {
         $this->clave = $clave;
-    }
-    public function setDni($dni)
-    {
-        $this->dni = $dni;
     }
     public function setNombre($nombre)
     {
@@ -173,7 +166,6 @@ class GestorUsuarios
             $stmt->bindParam(':inicio', $inicio, PDO::PARAM_INT);
             $stmt->bindParam(':registros', $registros, PDO::PARAM_INT);
             $stmt->execute();
-
             $usuarios = [];
             $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
             foreach ($resultado as $usuario) {
@@ -193,7 +185,6 @@ class GestorUsuarios
                     $usuario->activo
                 );
             }
-
             // Contar los usuarios para la paginación
             if (!empty($buscar)) {
                 $query_contar = "SELECT COUNT(*) FROM usuarios WHERE dni LIKE :buscar";
@@ -218,8 +209,11 @@ class GestorUsuarios
     {
         $query = "DELETE FROM usuarios WHERE id = :id";
         try {
+            //Preparamos la consulta
             $stmt = $this->pdo->prepare($query);
+            //Vinculamos el id
             $stmt->bindValue(':id', $id);
+            //Ejecutamos la consulta con el id-> si sale bien, se borra el usuario
             if ($stmt->execute()) {
                 return "Usuario eliminado con exito.";
             } else {
@@ -236,7 +230,9 @@ class GestorUsuarios
         try {
             $sql = "INSERT INTO usuarios (clave, dni, nombre, apellidos, direccion, localidad, provincia, cp, telefono, email, rol, activo)
                     VALUES (:clave, :dni, :nombre, :apellidos, :direccion, :localidad, :provincia, :cp, :telefono, :email, :rol, :activo)";
+            //Preparamos la consulta para insertar los datos
             $stmt = $this->pdo->prepare($sql);
+            //Vinculamos estos datos
             $stmt->bindValue(':clave', $usuario->getClave());
             $stmt->bindValue(':dni', $usuario->getDni());
             $stmt->bindValue(':nombre', $usuario->getNombre());
@@ -249,7 +245,7 @@ class GestorUsuarios
             $stmt->bindValue(':email', $usuario->getEmail());
             $stmt->bindValue(':rol', $usuario->getRol());
             $stmt->bindValue(':activo', $usuario->getActivo());
-
+            //Ejectuamos
             if ($stmt->execute()) {
                 return "Usuario creado con exito.";
             } else {

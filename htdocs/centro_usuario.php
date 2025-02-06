@@ -4,23 +4,23 @@ session_start();
 include_once 'config/conectar_db.php';
 $pdo = conectar_db();
 
-if (!isset($_SESSION['usuario']) || $_SESSION['acceso'] !== true || $_SESSION['rol'] !== 'Usuario') {
+if ($_SESSION['acceso'] !== true || $_SESSION['rol'] !== 'Usuario') {
     header('Location: index.php');
     exit;
 }
 
-$ID_usuario = $_SESSION['id'];
+$ID_usuario = $_SESSION['id'];//Asignamos a la variable el id de sesión
 
 include_once 'gestores/gestor_pedidos.php';
 include_once 'gestores/gestor_usuarios.php';
 
 $gestorPedidos = new GestorPedidos($pdo);
+//Obtenemos los pedidos del usuario logueado
 $pedidos = $gestorPedidos->obtener_pedido_usuario($ID_usuario);
 
 $gestorUsuarios = new GestorUsuarios($pdo);
+//Obtenemos los datos del usuario logueado
 $usuarioDetalles = $gestorUsuarios->obtener_usuario_por_id($ID_usuario);
-
-
 //procesa la cancelacion del pedido
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancelar_pedido'])) {
     $id_pedido = $_POST['id_pedido'];

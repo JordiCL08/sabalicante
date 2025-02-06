@@ -5,7 +5,7 @@ include_once 'config/conectar_db.php';
 include_once 'gestores/gestor_productos.php';
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador'  && $_SESSION['rol'] !== 'Contable') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador'  && $_SESSION['rol'] !== 'Contable') {
     escribir_log("Error al acceder a la zona de 'Visor de ventas' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
@@ -16,14 +16,18 @@ include_once 'includes/header.php';
 try {
     $pdo = conectar_db();
     $gestorProductos = new GestorProductos($pdo);
-    $query = "SELECT id_pedido, fecha, total, id_usuario,forma_pago FROM pedidos ORDER BY fecha DESC";
+    $gestorUsuarios = new GestorUsuarios($pdo);
+
+    //Obtener los pedidos
+    $query = "SELECT id_pedido, fecha, total, id_usuario, forma_pago FROM pedidos ORDER BY fecha DESC";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    //Obtener los top 5 productos más vendidos
+    $top_ventas = $gestorProductos->top_ventas();
 } catch (PDOException $e) {
-    echo '<div class="alert alert-danger text-center mt-4" role="alert">
-            Error al obtener los pedidos: ' . htmlspecialchars($e->getMessage()) . '
-          </div>';
+    $errores[] = "Error al obtener los pedidos: " . $e->getMessage();
     exit;
 }
 ?>
@@ -41,23 +45,19 @@ try {
         </div>
         <div class="card-body">
             <div class="list-group">
-                <?php
-                $top_ventas = $gestorProductos->top_ventas();  
-                if (!empty($top_ventas)) {
-                    foreach ($top_ventas as $producto) {
-                        echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
-                        echo 'Código del Producto: ' . htmlspecialchars($producto->codigo_producto);
-                        echo '<p>Total vendido: ' . $producto->total_vendido . ' /uds </p>';
-                        echo '</li>';
-                    }
-                } else {
-                    echo '<li class="list-group-item text-center">No hay datos disponibles.</li>';
-                }
-                ?>
+                <?php if (!empty($top_ventas)): ?>
+                    <?php foreach ($top_ventas as $producto): ?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <?php echo 'Código del Producto: ' . htmlspecialchars($producto->codigo_producto); ?>
+                            <p>Total vendido: <?php echo $producto->total_vendido ?> / uds</p>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="list-group-item text-center">No hay datos disponibles.</li>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-
     <!-- Filtros por fecha -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
@@ -98,7 +98,6 @@ try {
                 <?php if (!empty($pedidos)): ?>
                     <?php foreach ($pedidos as $pedido): ?>
                         <?php
-                        $gestorUsuarios = new GestorUsuarios($pdo);
                         $usuario = $gestorUsuarios->obtener_usuario_por_id($pedido['id_usuario']); //sacamos los datos del usuario por el id
                         if (is_object($usuario)) { //extraemos el dato que queremos del objeto
                             $usuario = $usuario->getEmail();

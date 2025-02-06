@@ -77,19 +77,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si no hay errores, registrar al cliente
     if (empty($errores)) {
         try {
-            $usuario = new Usuario(null, $clave, $dni, $nombre, $apellidos, '', '', '','' , $telefono, $email, 'usuario', 1);
+            $usuario = new Usuario(null, $clave, $dni, $nombre, $apellidos, '', '', '', '', $telefono, $email, 'usuario', 1);
             $resultado = $gestorUsuarios->crear_usuario($usuario);
 
             if ($resultado) {
                 $nom_usuario  = $usuario->getNombre();
                 $creador_usuario = !empty($_SESSION['usuario']) ? $_SESSION['usuario'] : $nom_usuario;
                 escribir_log("El usuario $nom_usuario creado correctamente por el usuario: $creador_usuario", 'usuarios');
-                $_SESSION['mensaje'] = "Registro creado correctamente.";
+                $_SESSION['mensaje'] = "Usuario dado de alta correctamente.";
                 header('Location: index.php');
                 exit();
             } else {
                 escribir_log("Error al crear el usuario $nom_usuario ", 'usuarios');
-                $errores[] = "Hubo un problema al registrar al usuario.";
+                $errores[] = "Hubo un problema al dar de alta el usuario.";
                 header('Location: index.php');
             }
         } catch (PDOException $e) {
@@ -107,15 +107,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 include_once "includes/header.php";
 ?>
 <!-- Contenedor principal de la página -->
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <div class="row flex-grow-1 justify-content-center">
         <!-- Formulario de registro -->
-        <main class="col-md-8 col-lg-6 p-4  bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <!-- Muestra errores, si los hay -->
             <?php require_once('config/procesa_errores.php'); ?>
             <h2 class="text-center mb-4">Formulario de Nuevo Usuario</h2>
             <!-- Formulario -->
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="needs-validation" novalidate>
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
                 <!-- Datos personales -->
                 <h4 class="mb-3">Datos personales</h4>
                 <div class="row">

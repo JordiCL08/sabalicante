@@ -2,7 +2,7 @@
 session_start();
 include_once 'config/funciones.php';
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
     escribir_log("Error al acceder a la zona de 'Mantenimiento Productos' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
@@ -10,12 +10,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SE
 }
 
 include_once 'includes/header.php';
-
-$rol = $_SESSION['rol'];
-$nombre_usuario = $_SESSION['usuario'];
-
 $gestorProductos = new GestorProductos($pdo);
-
 $buscar = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
 $ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'ASC';
 list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, $ordenar);
@@ -30,14 +25,12 @@ list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, 
     <!-- Formulario de búsqueda -->
     <form method="GET" action="mantenimiento_productos.php" class="mb-4">
         <div class="input-group">
-            <label for="buscar" class="visually-hidden">Buscar por nombre</label>
-            <input type="text" id="buscar" name="buscar" class="form-control"
-                placeholder="Introduce nombre para hacer la búsqueda..."
-                value="<?php echo htmlspecialchars($buscar); ?>" aria-label="Buscar por nombre">
-            <button type="submit" class="btn btn-primary" aria-label="Buscar">
+            <input type="text" id="buscar" name="buscar" class="form-control" placeholder="Buscar producto por nombre..."
+                value="<?php echo htmlspecialchars($buscar); ?>" aria-label="Buscar por Producto">
+            <button type="submit" class="btn btn-primary">
                 <i class="bi bi-search"></i> Buscar
             </button>
-            <a href="mantenimiento_productos.php" class="btn btn-secondary" aria-label="Limpiar búsqueda">
+            <a href="mantenimiento_productos.php" class="btn btn-secondary">
                 <i class="bi bi-x-circle"></i> Limpiar
             </a>
         </div>
@@ -50,12 +43,10 @@ list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, 
                 <tr>
                     <th>Código</th>
                     <th>Nombre
-                        <?php if ($rol === 'Administrador'): ?>
-                            <a href="mantenimiento_productos.php?ordenar=ASC&buscar=<?php echo urlencode($buscar); ?>"
-                                class="text-decoration-none" aria-label="Ordenar ascendentemente">⬆️</a>
-                            <a href="mantenimiento_productos.php?ordenar=DESC&buscar=<?php echo urlencode($buscar); ?>"
-                                class="text-decoration-none" aria-label="Ordenar descendentemente">⬇️</a>
-                        <?php endif; ?>
+                        <a href="mantenimiento_productos.php?ordenar=ASC&buscar=<?php echo urlencode($buscar); ?>"
+                            class="text-decoration-none" aria-label="Ordenar ascendentemente">⬆️</a>
+                        <a href="mantenimiento_productos.php?ordenar=DESC&buscar=<?php echo urlencode($buscar); ?>"
+                            class="text-decoration-none" aria-label="Ordenar descendentemente">⬇️</a>
                     </th>
                     <th>Descripción</th>
                     <th>Familia</th>
@@ -130,14 +121,12 @@ list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, 
     <?php endif; ?>
 
     <!-- Botón para nuevo producto -->
-    <?php if ($rol === 'Administrador' || $rol === 'Editor'): ?>
         <div class="text-center mt-4">
             <button type="button" onclick="window.location.href='nuevo_producto.php'"
                 class="btn btn-success btn-lg" aria-label="Nuevo producto">
                 <i class="bi bi-plus-circle"></i> Nuevo producto
             </button>
         </div>
-    <?php endif; ?>
 </div>
 
 <!-- Footer -->

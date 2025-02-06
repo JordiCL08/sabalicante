@@ -1,11 +1,10 @@
 <?php
-include_once "actualizar_cantidad.php";
-
+include_once "actualizar_carrito.php";
+//Comprobamos que el carrito existe y tiene productos
 if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
     $total = 0;
 ?>
     <h2 class="mb-4 text-center">Carrito de Compras</h2>
-
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
@@ -21,7 +20,7 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
             </thead>
             <tbody>
                 <?php
-                foreach ($_SESSION['carrito'] as $index => $producto) {
+                foreach ($_SESSION['carrito'] as $producto) {
                     // Validar y aplicar descuento, asegurándonos de que el valor sea un número
                     $descuento = isset($producto['descuento']) && is_numeric($producto['descuento']) ? $producto['descuento'] / 100 : 0;
                     $precio_final = $producto['precio'] * (1 - $descuento);  // Aplica el descuento al precio                    
@@ -31,13 +30,10 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
                     <tr id="producto_<?= htmlspecialchars($producto['codigo']) ?>">
                         <td><?= htmlspecialchars($producto['nombre']) ?></td>
                         <td>
-                            <input type="number"
-                                name="cantidad"
-                                value="<?= htmlspecialchars($producto['cantidad']) ?>"
+                            <input type="number"name="cantidad"value="<?= htmlspecialchars($producto['cantidad']) ?>"
                                 min="1"
                                 class="form-control form-control-sm cantidad"
                                 data-codigo="<?= htmlspecialchars($producto['codigo']) ?>"
-                                aria-label="Cantidad de <?= htmlspecialchars($producto['nombre']) ?>"
                                 style="width: 80px;">
                         </td>
 
@@ -59,10 +55,10 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
                         <!-- Subtotal -->
                         <td id="subtotal_<?= htmlspecialchars($producto['codigo']) ?>"><?= number_format($subtotal, 2) ?> €</td>
 
-                        <!-- Botón de eliminar -->
+                        <!-- Botón de eliminar (enviamos el post de eliminar_producto con el código de producto )-->
                         <td>
                             <form method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto del carrito?');">
-                                <input type="hidden" name="eliminar" value="<?= htmlspecialchars($producto['codigo']) ?>"> 
+                                <input type="hidden" name="eliminar_producto" value="<?= htmlspecialchars($producto['codigo']) ?>">
                                 <button type="submit" class="btn btn-danger btn-sm" title="Eliminar del carrito"><i class="bi bi-trash"></i> Eliminar</button>
                             </form>
                         </td>
@@ -96,7 +92,7 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
 <script>
     document.querySelectorAll('.cantidad').forEach(function(input) {
         input.addEventListener('change', function() {
-            var codigo = this.getAttribute('data-codigo');
+            var codigo = this.getAttribute('data-codigo');//codigo del producto
             var cantidad = this.value;
 
             //Enviar la nueva cantidad al servidor 

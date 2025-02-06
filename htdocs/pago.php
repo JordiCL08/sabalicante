@@ -4,9 +4,10 @@ include_once 'config/conectar_db.php';
 include_once 'gestores/gestor_usuarios.php';
 
 $pdo = conectar_db();
+//Creamos la instancia para el gestor de usuarios
 $gestorUsuarios = new GestorUsuarios($pdo);
 $ID_usuario = $_SESSION['id'];
-
+//Si hay un id usuario obtenemos los datos de la bbdd
 if (isset($ID_usuario)) {
     $usuarioDetalles = $gestorUsuarios->obtener_usuario_por_id($ID_usuario);
 } else {
@@ -115,7 +116,7 @@ if (isset($ID_usuario)) {
         const transferencia_info = document.getElementById('transferencia-info');
         const efectivo_info = document.getElementById('efectivo-info');
         const gastos_envio = document.getElementById('gastos_envio_aplicados');
-        // Función para mostrar el mensaje según la forma de pago
+        //Función para mostrar el mensaje según la forma de pago
         function seleccion_formulario(forma_de_pago) {
             tarjeta_info.style.display = 'none';
             transferencia_info.style.display = 'none';
@@ -133,7 +134,7 @@ if (isset($ID_usuario)) {
                     break;
             }
         }
-
+        //Funcion para mostrar y/o asignar los gastos de envio
         function actualizar_gastos_envio(metodo_envio) {
             if (metodo_envio === 'recoger_tienda') {
                 gastos_envio.style.display = 'none'; // No mostrar gastos si es "Recoger en Tienda"
@@ -145,16 +146,16 @@ if (isset($ID_usuario)) {
             }
         }
 
-        // Mostrar la primera opción
+        //Mostrar la primera opción
         seleccion_formulario(forma_pago_seleccionada.value);
         actualizar_gastos_envio(metodo_envio_seleccionado.value);
 
-        // Evento para mostrar la forma de pago seleccionada
+        //Evento para mostrar la forma de pago seleccionada
         forma_pago_seleccionada.addEventListener('change', function() {
             seleccion_formulario(forma_pago_seleccionada.value);
         });
 
-        // Evento para mostrar los gastos de envío seleccionados
+        //Evento para mostrar los gastos de envío seleccionados
         metodo_envio_seleccionado.addEventListener('change', function() {
             actualizar_gastos_envio(metodo_envio_seleccionado.value);
         });

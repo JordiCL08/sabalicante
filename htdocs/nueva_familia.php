@@ -3,7 +3,7 @@ session_start();
 include_once "config/conectar_db.php";
 include_once "gestores/gestor_familias.php";
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
     escribir_log("Error al acceder a la zona de 'nueva familia' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
@@ -54,16 +54,16 @@ include_once "includes/header.php";
 ?>
 
 <!-- Contenedor principal de la página -->
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <div class="row flex-grow-1 justify-content-center">
         <!-- Formulario de registro -->
-        <main class="col-md-8 col-lg-6 p-4  bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <h2 class="text-center mb-4">Formulario de Alta Familias</h2>
 
             <!-- Muestra errores, si los hay -->
             <?php require_once('config/procesa_errores.php'); ?>
             <!-- Formulario -->
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" class="mt-4">
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
                 <!-- Nombre -->
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre:</label>

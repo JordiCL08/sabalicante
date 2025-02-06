@@ -16,7 +16,7 @@ function cargar_carrito($id_usuario)
     // Crear un nuevo carrito para el usuario logueado
     $_SESSION['carrito'] = [];
 
-    //Recorrer los productos del carrito del usuario y cargar su contenido
+    //Recorrer los productos del carrito del usuario 
     while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $query_producto = "SELECT * FROM productos WHERE codigo = :codigo";
         $stmt_producto = $pdo->prepare($query_producto);
@@ -35,7 +35,7 @@ function cargar_carrito($id_usuario)
             'precio_final' => $producto_detalle['precio'] * (1 - ($producto_detalle['descuento'] ?? 0) / 100)
         ];
     }
-
+    //combinamos los productos en el carrito del usuario con los de la sesion
     foreach ($carrito_sesion as $producto_sesion) {
         //Verificar si el producto ya está en el carrito del usuario
         $encontrado = false;
@@ -90,10 +90,10 @@ function actualizar_carrito($codigo, $cantidad, $pdo)
     }
     // Verificar si el carrito está en la sesión
     if (isset($_SESSION['carrito'])) {
-        foreach ($_SESSION['carrito'] as $llave => $producto) {
+        foreach ($_SESSION['carrito'] as $key => $producto) {
             if ($producto['codigo'] == $codigo) {
                 // Actualiza la cantidad en la sesión
-                $_SESSION['carrito'][$llave]['cantidad'] = $cantidad;
+                $_SESSION['carrito'][$key]['cantidad'] = $cantidad;
                 $query = "UPDATE carritos SET cantidad = :cantidad WHERE id_usuario = :id_usuario AND codigo_producto = :codigo_producto";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
@@ -111,10 +111,10 @@ function eliminar_producto_carrito($codigo, $pdo)
 {
     // Verificar si el carrito está en la sesión
     if (isset($_SESSION['carrito'])) {
-        foreach ($_SESSION['carrito'] as $llave => $producto) {
+        foreach ($_SESSION['carrito'] as $key => $producto) {
             if ($producto['codigo'] == $codigo) {
                 // Eliminar de la sesión
-                unset($_SESSION['carrito'][$llave]);
+                unset($_SESSION['carrito'][$key]);
 
                 // Ahora eliminamos el producto de la base de datos
                 $query = "DELETE FROM carritos WHERE id_usuario = :id_usuario AND codigo_producto = :codigo_producto";

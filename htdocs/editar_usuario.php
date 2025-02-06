@@ -9,9 +9,9 @@ if (!isset($_SESSION['acceso']) ) {
     header("Location: index.php");
     exit;
 }
-$rol_sesion = $_SESSION['rol'];
+$rol_sesion = $_SESSION['rol'];//Asignamos a la variable el rol de la sesion
 $pdo = conectar_db();
-$id_usuario = $_SESSION['id'];
+$id_usuario = $_SESSION['id'];//Asignamos a la variable el id del usuario de la sesion
 $gestorUsuario = new GestorUsuarios($pdo);
 $errores = [];
 
@@ -24,7 +24,9 @@ if (isset($_GET['id'])) {
     }
     //Los Empleados y contables no pueden editar a un administrador
     if ($rol_sesion === 'Empleado' || $rol_sesion === 'Contable') {
+        //Obtenemos el usuario por su id
         $usuario = $gestorUsuario->obtener_usuario_por_id($id);
+        //Si el usuario logueado tiene rol de administrador no puede editar sus datos
         if ($usuario && $usuario->getRol() === 'Administrador') {
             header("Location: index.php");
             exit;
@@ -43,6 +45,7 @@ if (isset($_GET['id'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //EDITAR USUARIO
     if (isset($_POST['editar_usuario'])) {
+        //Recibimos los nuevos datos y quitamos los espacios, y lo asignamos a sus variables
         $id = trim($_POST['id']);
         $dni = trim($_POST['dni']);
         $nombre = trim($_POST['nombre']);
@@ -90,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $clave = $usuario->getClave(); // Asignamos la contraseña actual 
         }
 
-        // Si no hay errores, actualizar usuario
+        // Si no hay errores, actualizar usuario con los datos obtenidos del formulario( y pasados a la variables)
         if (empty($errores)) {
             $usuario->setNombre($nombre);
             $usuario->setApellidos($apellidos);
@@ -157,17 +160,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <?php include_once "includes/header.php"; ?>
 <!-- Contenedor principal -->
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <div class="row flex-grow-1 justify-content-center">
         <!-- Contenido principal -->
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <h2 class="text-center mb-4">Editar Usuario</h2>
             <!-- Muestra errores, si los hay -->
             <?php require_once 'config/procesa_errores.php'; ?>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
-                        <!-- ID ,DNI -->
+                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
+                <!-- ID ,DNI -->
                         <input type="hidden" name="dni" value="<?php echo htmlspecialchars($usuario->getDni()); ?>">
                         <input type="hidden" name="id" value="<?php echo htmlspecialchars($usuario->getId()); ?>">
                         <input type="hidden" name="rol" value="<?php echo htmlspecialchars($usuario->getRol()); ?>">

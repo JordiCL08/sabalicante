@@ -4,7 +4,7 @@ include_once(__DIR__ . '/../config/funciones.php');
 
 class Familia
 {
- 
+
     private $id_familia;
     private $nombre;
     private $descripcion;
@@ -34,23 +34,6 @@ class Familia
     {
         return $this->activo;
     }
-
-    public function setIdFamilia($id_familia)
-    {
-        $this->id_familia = $id_familia;
-    }
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-    }
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-    }
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-    }
 }
 
 
@@ -65,34 +48,36 @@ class GestorFamilias
     }
 
     // Mostrar familias con paginación y ordenación
-    public function mostrar_familias($buscar_familia = '', $ordenar = 'ASC')
+    public function mostrar_familias($buscar = '', $ordenar = 'ASC')
     {
         try {
-            // Definir el número de registros por página
+            //Definir el número de registros por página
             $registros = 10;
 
-            // Obtener el número de página actual
+            // btener el número de página actual, si no existe asignamos la página 1
             $pagina = isset($_GET["pagina"]) && is_numeric($_GET["pagina"]) && $_GET["pagina"] > 0 ? (int)$_GET["pagina"] : 1;
             $inicio = ($pagina - 1) * $registros;
 
             // Crear la consulta base con el filtro de búsqueda (si existe)
-            $query = "SELECT COUNT(*) FROM familias WHERE nombre LIKE :buscar_familia";
+            $query = "SELECT COUNT(*) FROM familias WHERE nombre LIKE :buscar";
+            //Preparamos la consulta
             $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(':buscar_familia', '%' . $buscar_familia . '%');
+            $stmt->bindValue(':buscar', '%' . $buscar . '%');
             $stmt->execute();
             $num_total_registros = $stmt->fetchColumn();
+            //Obtenemos el total de páginas (con ceil redondeamos para arriba)
             $total_paginas = ceil($num_total_registros / $registros);
-
             // Consulta para obtener las familias con el filtro de búsqueda y orden
-            $query = "SELECT * FROM familias WHERE nombre LIKE :buscar_familia ORDER BY nombre $ordenar LIMIT :inicio, :registros";
+            $query = "SELECT * FROM familias WHERE nombre LIKE :buscar ORDER BY nombre $ordenar LIMIT :inicio, :registros";
             $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(':buscar_familia', '%' . $buscar_familia . '%');
+            $stmt->bindValue(':buscar', '%' . $buscar . '%');
             $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
             $stmt->bindValue(':registros', $registros, PDO::PARAM_INT);
             $stmt->execute();
 
             // Obtener las familias
             $familias = [];
+            //Convertimos en objeto y lo guardamos en array
             $resultado = $stmt->fetchAll(PDO::FETCH_OBJ);
             foreach ($resultado as $familia) {
                 $familias[] = new Familia(
@@ -116,7 +101,9 @@ class GestorFamilias
         // Eliminar la familia de la base de datos
         $query = "DELETE FROM familias WHERE id_familia = :id_familia";
         try {
+            //Preparamos la consulta
             $stmt = $this->pdo->prepare($query);
+            //Vinculamos los parametros, utilizamos param_int porque es un entero
             $stmt->bindParam(':id_familia', $id_familia, PDO::PARAM_INT);
             if ($stmt->execute()) {
                 return "Familia eliminada con éxito.";
@@ -133,9 +120,12 @@ class GestorFamilias
     {
         $query = "INSERT INTO familias (nombre, descripcion, activo) VALUES (:nombre, :descripcion, 1)";
         try {
+            //Preparamos la consulta
             $stmt = $this->pdo->prepare($query);
+            //Viculamos los valores de los parametros con los valores de la familia
             $stmt->bindValue(':nombre', $familia->getNombre());
             $stmt->bindValue(':descripcion', $familia->getDescripcion());
+            //Ejecutamos la consulta
             if ($stmt->execute()) {
                 return "Familia añadida con éxito.";
             } else {
@@ -151,11 +141,14 @@ class GestorFamilias
     {
         $query = "UPDATE familias SET nombre = :nombre, descripcion = :descripcion, activo = :activo WHERE id_familia = :id_familia";
         try {
+            //Preparamos la consulta
             $stmt = $this->pdo->prepare($query);
+            //Viculamos los valores de los parametros con los valores de la familia
             $stmt->bindValue(':id_familia', $familia->getIdFamilia());
             $stmt->bindValue(':nombre', $familia->getNombre());
             $stmt->bindValue(':descripcion', $familia->getDescripcion());
             $stmt->bindValue(':activo', $familia->getActivo());
+            //Ejecutamos la consulta
             if ($stmt->execute()) {
                 return "Familia editada con éxito.";
             } else {
@@ -172,10 +165,15 @@ class GestorFamilias
         $query = 'SELECT * FROM familias WHERE id_familia = :id_familia';
 
         try {
+            //Preparamos la consulta
             $stmt = $this->pdo->prepare($query);
+            //Ejectuamos pasando el id de la familia 
             $stmt->execute(['id_familia' => $id_familia]);
+            //Obtenemos el resultado como objeto
             $familia = $stmt->fetch(PDO::FETCH_OBJ);
+            //si hya familia
             if ($familia !== false) {
+                //Devolvemos un objeto con la clase
                 return new Familia(
                     $familia->id_familia,
                     $familia->nombre,

@@ -4,7 +4,7 @@ include_once "gestores/gestor_familias.php";
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado')) {
+if (!isset($_SESSION['acceso']) || ($_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado')) {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -16,7 +16,8 @@ $gestorFamilia = new GestorFamilias($pdo);
 $errores = [];
 $familia = [];
 if (isset($_GET['id_familia'])) {
-    $id_familia = $_GET['id_familia'];
+    $id_familia = $_GET['id_familia']; //Asignamos a la variable el id de la familia desde la sesion
+    //Obtenemos la familia por el id desde la funcion obtener familia id
     $familia = $gestorFamilia->obtener_familia_id($id_familia);
 
     if (!$familia) {
@@ -24,6 +25,7 @@ if (isset($_GET['id_familia'])) {
     }
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_familia'])) {
+    //Recibimos los datos del formulario y los asignamos a la variable
     $id_familia = trim($_POST['id_familia']);
     $nombre = trim($_POST['nombre']);
     $descripcion = trim($_POST['descripcion']);
@@ -38,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_familia'])) {
 
     if (empty($errores)) {
         try {
+            //Asignamos los nuevos datos 
             $familia = new Familia($id_familia, $nombre, $descripcion, $activo);
             $resultado = $gestorFamilia->editar_familia($familia);
             if ($resultado) {
@@ -58,26 +61,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_familia'])) {
     }
     $_SESSION['errores'] = $errores;
 }
-
 ?>
-
 <?php
 // CABECERA
 include_once "includes/header.php";
 ?>
-
 <!-- Contenedor principal de la página -->
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <div class="row flex-grow-1 justify-content-center">
         <!-- Formulario de edición de familia -->
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <h2 class="text-center mb-4">Editar Familia</h2>
 
             <!-- Muestra errores, si los hay -->
             <?php require_once('config/procesa_errores.php'); ?>
 
             <!-- Formulario -->
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" class="mt-4">
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="mt-4  border border-dark rounded p-4">
                 <!-- Campo oculto  -->
                 <input type="hidden" name="id_familia" value="<?php echo htmlspecialchars($familia->getIdFamilia()); ?>">
                 <!-- Nombre -->

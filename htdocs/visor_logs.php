@@ -9,7 +9,7 @@ if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador') {
     exit;
 }
 include_once 'includes/header.php';
-//Logs disponibles en un array
+//Logs disponibles
 $archivos_log = [
     'acceso'     => 'logs/logs_acceso.txt',
     'familias'   => 'logs/logs_familias.txt',
@@ -20,7 +20,7 @@ $archivos_log = [
     'usuarios'   => 'logs/logs_usuarios.txt',
     'zonas'      => 'logs/logs_zonas.txt',
 ];
-
+//Tipo de log para mostrar, por defecto es el de acceso
 $tipo_log = $_GET['tipo_log'] ?? 'acceso';
 $archivo = $archivos_log[$tipo_log] ?? 'logs/logs_zonas.txt';
 ?>
@@ -32,10 +32,12 @@ $archivo = $archivos_log[$tipo_log] ?? 'logs/logs_zonas.txt';
         <label for="tipo_log" class="form-label fs-5 fw-bold">Selecciona el log que quieres revisar:</label>
         <div class="d-flex justify-content-center align-items-center gap-2">
             <select name="tipo_log" id="tipo_log" class="form-select w-auto">
-                <?php foreach ($archivos_log as $clave => $valor): ?>
-                    <option value="<?= $clave ?>" <?= $clave === $tipo_log ? 'selected' : '' ?>><?= ucfirst($clave) ?></option>
+                <!-- Recorremos los archivos_log y mostramos cada uno como opcion-->
+                <?php foreach ($archivos_log as $key => $valor): ?>
+                    <option value="<?= $key ?>" <?= $key === $tipo_log ? 'selected' : '' ?>><?= ucfirst($key) ?></option>
                 <?php endforeach; ?>
             </select>
+            <!--Boton para enviar el formulario y ver el log seleccionado -->
             <button type="submit" class="btn btn-primary btn-sm">Ver Log</button>
         </div>
     </form>
@@ -45,7 +47,9 @@ $archivo = $archivos_log[$tipo_log] ?? 'logs/logs_zonas.txt';
         <div class="card-body bg-dark  text-white">
             <h5 class="card-title text-center mb-4">Registros del Log</h5>
             <?php
+            //Comprobamos que el archivo existe y tiene registros
             if (file_exists($archivo)) {
+                //mostramos el log eliminado los saltos de línea y las lineas vacías
                 $logs = file($archivo, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                 if ($logs) {
                     echo '<div class="log-container overflow-auto">';

@@ -14,9 +14,12 @@ $pdo = conectar_db();
 $gestorSubFamilias = new GestorSubFamilias($pdo);
 $gestorProductos = new GestorProductos($pdo);
 $gestorUsuarios = new GestorUsuarios($pdo);
-// Filtrar 
-$ordenar = isset($_GET['ordenar']) && in_array(strtoupper($_GET['ordenar']), ['ASC', 'DESC']) ? $_GET['ordenar'] : 'ASC';
-$pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+//Ordenar y paginación
+/*En el caso de que "ordenar" no este definido ordena por ascendente, comparamos los valores con descendente
+    si es verdadero asigna desc y si no asc*/
+$ordenar = strtoupper($_GET['ordenar'] ?? 'ASC') === 'DESC' ? 'DESC' : 'ASC';
+//Si no hay nº de página asigna 1 por defecto.
+$pagina = (int) ($_GET['pagina'] ?? 1);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -57,7 +60,7 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
     <!-- Header -->
     <header class="sticky-top bg-light text-dark shadow-sm">
         <!-- NAVBAR Solo para administradores,empleados,contables -->
-        <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] !== 'Usuario'): ?>
+        <?php if (isset($_SESSION['acceso']) && $_SESSION['rol'] !== 'Usuario'): ?>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="index.php">Panel de Gestión</a>
@@ -67,7 +70,8 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <!-- Gestión de Usuarios -->
-                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] !== 'Contable'): ?>
+
+                            <?php if (isset($_SESSION['acceso']) && $_SESSION['rol'] !== 'Contable'): ?> <!--Aquí no tienen acceso los contables-->
                                 <li class="nav-item">
                                     <a class="nav-link active" href="mantenimiento_usuarios.php">Gestión de Usuarios</a>
                                 </li>
@@ -75,10 +79,7 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                                 <li class="nav-item">
                                     <a class="nav-link" href="mantenimiento_productos.php">Gestión de Productos</a>
                                 </li>
-                            <?php endif; ?>
-
-                            <!-- Gestión de Familias -->
-                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'Administrador' || $_SESSION['rol'] === 'Empleado'): ?>
+                                <!-- Gestión de Familias -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="mantenimiento_familias.php">Gestión de Familias</a>
                                 </li>
@@ -87,22 +88,21 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                                     <a class="nav-link" href="mantenimiento_subfamilias.php">Gestión de SubFamilias</a>
                                 </li>
                             <?php endif; ?>
-
                             <!-- Gestión de Pedidos -->
                             <li class="nav-item">
                                 <a class="nav-link" href="mantenimiento_pedidos.php">Gestión de Pedidos</a>
                             </li>
 
                             <!-- Gestión de Ventas -->
-                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] !== 'Empleado'): ?>
+                            <?php if (isset($_SESSION['acceso']) && $_SESSION['rol'] !== 'Empleado'): ?><!--Aquí no tienen acceso los Empleados -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="visor_ventas.php">Visor de Ventas</a>
                                 </li>
                             <?php endif; ?>
 
                             <!-- LOGS -->
-                            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'Administrador'): ?>
-                                <div class="vr mx-3"></div> <!-- Separador visual -->
+                            <?php if (isset($_SESSION['acceso']) && $_SESSION['rol'] === 'Administrador'): ?><!--Aquí solo tiene acceso los Administradores-->
+                                <div class="vr mx-3"></div> <!-- Separador -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="visor_logs.php">LOGS</a>
                                 </li>
@@ -116,15 +116,14 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                 </div>
             </nav>
         <?php endif; ?>
-        <!-- NAVBAR Solo para usuarios normales -->
-        <?php if (!isset($_SESSION['rol']) || $_SESSION['rol'] === 'Usuario'): ?>
+        <!-- NAVBAR Solo para usuarios normales, registrados o no -->
+        <?php if (!isset($_SESSION['acceso']) || $_SESSION['rol'] === 'Usuario'): ?>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <!-- Logo centrado -->
                     <a href="index.php" class="logo-btn d-block mx-auto">
                         <img src="estilos/logo.png" alt="Logo Sabores Alicante" class="logo-navbar">
                     </a>
-
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#hamburgesa_menu" aria-controls="hamburgesa_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -154,13 +153,14 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
 
                         <!-- Buscador-->
                         <form class="d-flex mx-auto mb-2" role="search" method="get" style="max-width: 800px; width: 100%;">
-                            <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar" name="buscar_producto" value="">
+                            <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar" name="buscar" value="">
                             <button class="btn btn-outline-primary" type="submit">Buscar</button>
                         </form>
 
                         <!-- Menú a la derecha -->
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item">
+                                <!-- En el caso de que haya acceso por parte del usuario, ve el centro usuario(con sus datos) -->
                                 <a class="nav-link bi bi-person-fill me-4 fs-5 text-dark"
                                     href="<?php echo isset($_SESSION['usuario']) && $_SESSION['acceso'] === true ? 'centro_usuario.php' : 'acceso.php'; ?>"
                                     aria-label="Mi Usuario">
@@ -172,14 +172,15 @@ $pagina = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int) $_GET['p
                                     Mi Carrito
                                     <span class="badge bg-success rounded-circle position-absolute translate-middle p-2">
                                         <?php
-                                        // Calcular el total de artículos en el carrito
+                                        // Calcular el total de productos en el carrito
                                         if (isset($_SESSION['carrito'])) {
-                                            $total_articulos = array_reduce($_SESSION['carrito'], function ($total, $articulo) {
-                                                return $total + $articulo['cantidad'];
+                                            //si el carrito no es null, cuenta la cantidad de productos en el carrito
+                                            $total_productos = array_reduce($_SESSION['carrito'], function ($total, $producto) {
+                                                return $total + $producto['cantidad']; //Suma el nº de unidades de cada producto
                                             }, 0);
-                                            echo $total_articulos;
+                                            echo $total_productos;
                                         } else {
-                                            echo 0;
+                                            echo 0; //si es null (esta vacio) 
                                         }
                                         ?>
                                     </span>

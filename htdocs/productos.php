@@ -1,32 +1,31 @@
 <div class="container-fluid">
-
     <?php
-    // Obtener el valor del parámetro 'buscar_producto' si está presente
-    $buscar_producto = isset($_GET['buscar_producto']) ? trim($_GET['buscar_producto']) : '';
-    $ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'ASC';
-
+    // Obtener valores de búsqueda y filtros
+    $buscar = isset($_GET['buscar']) ? trim($_GET['buscar']) : '';
+    $ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'ASC'; // Predeterminado: ASC
     $familia = isset($_GET['familia']) ? $_GET['familia'] : null;
     $subfamilia = isset($_GET['subfamilia']) ? $_GET['subfamilia'] : null;
 
-    list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar_producto, $ordenar, $familia, $subfamilia);
+    //Llamamos al método para obtener los productos con el campo de ordenación
+    list($productos, $total_paginas) = $gestorProductos->mostrar_productos($buscar, $ordenar, $familia, $subfamilia);
 
     if (!empty($productos)) :
     ?>
+
         <div class="d-flex justify-content-between align-items-center mb-3">
             <form method="GET" class="d-flex">
                 <!-- Mantener los valores actuales -->
-                <input type="hidden" name="buscar_producto" value="<?php echo htmlspecialchars($buscar_producto); ?>">
+                <input type="hidden" name="buscar" value="<?php echo htmlspecialchars($buscar); ?>">
                 <input type="hidden" name="familia" value="<?php echo htmlspecialchars($familia); ?>">
                 <input type="hidden" name="subfamilia" value="<?php echo htmlspecialchars($subfamilia); ?>">
-
-                <!-- Selección para ordenar los productos -->
+                <input type="hidden" name="campo_orden" value="precio">
+                <!-- Selección para ordenar los productos por precio -->
                 <select name="ordenar" class="form-select" onchange="this.form.submit()">
                     <option value="ASC" <?php echo $ordenar == 'ASC' ? 'selected' : ''; ?>>Precio: Menor a Mayor</option>
                     <option value="DESC" <?php echo $ordenar == 'DESC' ? 'selected' : ''; ?>>Precio: Mayor a Menor</option>
                 </select>
             </form>
         </div>
-
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             <?php foreach ($productos as $producto): ?>
                 <?php if ($producto->getActivo() === 1): ?>
@@ -63,6 +62,7 @@
                                     <?php if (($producto->getStock()) <= 0): ?>
                                         <p class="card-text mt-2"><span class="badge bg-danger">Sin stock</span></p>
                                     <?php endif; ?>
+                                    <!-- Formulario para agregar el producto al carrito -->
                                     <form action="carrito/agregar_carrito.php?<?php echo $_SERVER['QUERY_STRING']; ?>" method="POST">
                                         <input type="hidden" name="codigo" value="<?php echo $producto->getCodigo(); ?>">
                                         <input type="hidden" name="cantidad" value="1">
@@ -74,7 +74,6 @@
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
-
         </div>
 
         <!-- Paginación -->
@@ -83,10 +82,10 @@
                 <?php
                 $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                 $parametros_paginacion = http_build_query([
-                    'buscar_producto' => $buscar_producto,
+                    'buscar' => $buscar,
                     'ordenar' => $ordenar,
                     'familia' => $familia,
-                    'subfamilia' => $subfamilia
+                    'subfamilia' => $subfamilia,
                 ]);
                 ?>
 
@@ -116,8 +115,7 @@
 
             <?php endif; ?>
         </div>
-
     <?php else: ?>
-        <p class="text-center text-muted">No se encontraron artículos.</p>
+        <p class="text-center text-muted">No se encontraron productos.</p>
     <?php endif; ?>
 </div>

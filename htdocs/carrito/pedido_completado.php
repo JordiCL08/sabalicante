@@ -6,25 +6,30 @@ include_once '../gestores/gestor_carritos.php';
 $pdo = conectar_db();
 $gestorPedido = new GestorPedidos($pdo);
 
-// Regenerar el ID de la sesión para mayor seguridad
+//Cambia el ID de la sesión para mayor seguridad
 session_regenerate_id();
 
 if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
     //Calculamos el total del pedido
     $total = 0;
     foreach ($_SESSION['carrito'] as $producto) {
-        if (!isset($producto['precio_final'], $producto['cantidad'], $producto['codigo']) ||  !is_numeric($producto['cantidad']) || !is_numeric($producto['precio_final'])) {
+        //Si el precio final y la cantidad estan vacios o no son un numero nos da error.
+        if (empty($producto['precio_final']) || empty($producto['cantidad']) || !is_numeric($producto['cantidad']) || !is_numeric($producto['precio_final'])) {
             $_SESSION['errores'][] = "Hay algún problema con el pedido. Ponte en contacto con info@sabalicante.es .";
             header("Location: ../carrito.php");
             exit();
         }
+        //En el caso de que no de el error, sacamos el total
         $total += $producto['precio_final'] * $producto['cantidad'];
     }
-
+    //**EXTRAEMOS DE LA SESION LA FORMA DE PAGO Y LOS GASTOS DE ENVIO  QUE SE RECIBEN EN EL CHECKOUT*/
     $forma_pago =  $_SESSION['forma_pago'];
     $gastos_envio =  $_SESSION['gastos_envio']; //sumaria 5 al total
+    /****************************************************************/
+    //Fecha en la que se hace el pedido
     $fecha_pedido = date('Y-m-d');
-    if ($gastos_envio > 1) {
+    //En el caso de que haya gastos de envio
+    if ($gastos_envio > 0) {
         $recogida_local = false;
     } else {
         $recogida_local = true;

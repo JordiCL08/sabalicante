@@ -14,3 +14,6 @@
 [2025-02-04 19:20:05] Producto con código: PRU12312 desactivado por el usuario Jordicodeviladl@gmail.com
 [2025-02-04 19:20:05] Producto con código: PRU12312  editado por el usuario Jordicodeviladl@gmail.com
 [2025-02-04 19:20:13] Producto con codigo: PPP99999 eliminado por el usuario Jordicodeviladl@gmail.com
+[2025-02-05 21:33:36] Producto con codigo: MNC02122 eliminado por el usuario Jordicodeviladl@gmail.com
+[2025-02-05 21:33:38] Producto con codigo: CCS00802 eliminado por el usuario Jordicodeviladl@gmail.com
+[2025-02-05 22:54:17] Producto con codigo: BEE59856 eliminado por el usuario Jordicodeviladl@gmail.com

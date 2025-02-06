@@ -23,8 +23,9 @@ include_once 'gestores/gestor_productos.php';
 $gestorPedidos = new GestorPedidos($pdo);
 $gestorProducto = new GestorProductos($pdo);
 $gestorUsuarios = new GestorUsuarios($pdo);
+//Obtenemos los ddatos del usuario logueado
 $detalle_usuario = $gestorUsuarios->obtener_usuario_por_id($id_usuario);
-// Asegurarse de que el usuario y el pedido están disponibles
+//Nos aeguramos de tener los datos
 if (!$detalle_usuario) {
     echo "No se encontraron datos para el usuario.";
     exit;

@@ -4,7 +4,7 @@ include_once "gestores/gestor_productos.php";
 session_start();
 
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
     exit;
@@ -34,12 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
     /**IMAGEN ********************************/
     // Verificar si se sube una nueva imagen
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-        // Obtener el nombre original y la extensión de la imagen
+        //Obtener el nombre original y la extensión de la imagen
         $nombre_imagen_puro = $_FILES['imagen']['name'];
         $extension = pathinfo($nombre_imagen_puro, PATHINFO_EXTENSION);
-        // Generar un nuevo nombre para la imagen con número aleatorio
+        //Generar un nuevo nombre para la imagen con número aleatorio
         $nombre_imagen = pathinfo($nombre_imagen_puro, PATHINFO_FILENAME) . "_" . rand(100000000, 999999999) . "." . $extension;
-        // Mover la imagen al directorio "imagenes"
+        //Mover la imagen al directorio "imagenes"
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], "imagenes/" . $nombre_imagen)) {
             $imagen = $nombre_imagen; // Asignar el nuevo nombre de la imagen
         } else {
@@ -47,12 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
             $errores[] = "Error al subir la imagen.";
         }
     }
-
     /*******************************************/
     $descuento = trim($_POST['descuento']);
     $activo = isset($_POST['activo']);
     $stock = trim($_POST['stock']);
-
     // Validación
     if (empty($nombre)) {
         $errores[] = "El nombre es obligatorio.";
@@ -90,24 +88,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar_producto'])) {
     $_SESSION['errores'] = $errores;
 }
 ?>
-
 <?php
 // CABECERA
 include_once "includes/header.php";
 ?>
 
 <!-- Contenedor principal de la página -->
-<div class="container-fluid d-flex flex-column min-vh-100">
+<div class="container-fluid d-flex flex-column min-vh-100 bg-light">
     <div class="row flex-grow-1 justify-content-center">
         <!-- Formulario de edición de producto -->
-        <main class="col-md-8 col-lg-6 p-4 bg-light">
+        <main class="col-md-8 col-lg-6 p-4">
             <h2 class="text-center mb-4">Editar Producto</h2>
 
             <!-- Muestra errores, si los hay -->
             <?php require_once('config/procesa_errores.php'); ?>
 
             <!-- Formulario -->
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" class="mt-4">
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" class="mt-4 border border-dark rounded p-4">
                 <!-- Código -->
                 <div class="mb-3">
                     <h4>Código de producto: <?php echo htmlspecialchars($producto->getCodigo()); ?></h4>

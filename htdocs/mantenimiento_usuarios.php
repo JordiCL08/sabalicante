@@ -2,7 +2,7 @@
 session_start();
 include_once 'config/funciones.php';
 // Verificamos que el usuario esté logueado y tenga el rol adecuado
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
+if (!isset($_SESSION['acceso']) || $_SESSION['rol'] !== 'Administrador' && $_SESSION['rol'] !== 'Empleado') {
     escribir_log("Error al acceder a la zona de 'Mantenimiento Usuarios' por falta de permisos ->" . $_SESSION['usuario'], 'zonas');
     // Redirigimos a la página de acceso si no está logueado o no tiene el rol adecuado
     header("Location: index.php");
@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'Administrador' && $_SE
 include_once "includes/header.php";
 
 $rol = $_SESSION['rol']; //asignamos a la variable rol el rol del usuario de la sesion.
-$nombre_usuario = $_SESSION['usuario']; //asignamos a la variable nombre_usuario el username del usuario de la sesion.
+$nombre_usuario = $_SESSION['usuario']; //asignamos a la variable nombre_usuario el email de la sesion.
 $gestorUsuarios = new GestorUsuarios($pdo);
 $buscar = isset($_POST['dni']) ? $_POST['dni'] : '';
 $ordenar = isset($_GET['ordenar']) ? $_GET['ordenar'] : 'ASC';
@@ -113,14 +113,13 @@ list($usuarios, $total_paginas) = $gestorUsuarios->mostrar_usuarios($buscar, $or
             </tbody>
         </table>
     </div>
-
     <!-- Paginación -->
-    <?php if ($rol === 'Administrador' && empty($buscar) && $total_paginas > 1): ?>
+    <?php if (empty($buscar) && $total_paginas > 1): ?>
         <nav>
             <ul class="pagination justify-content-center">
                 <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
                     <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?pagina=<?php echo $i; ?>&buscar=<?php echo urlencode($buscar); ?>&ordenar=<?php echo urlencode($ordenar); ?>">
+                        <a class="page-link" href="?pagina=<?php echo $i; ?>&buscar=<?php echo urlencode($buscar); ?>">
                             <?php echo $i; ?>
                         </a>
                     </li>
@@ -128,16 +127,13 @@ list($usuarios, $total_paginas) = $gestorUsuarios->mostrar_usuarios($buscar, $or
             </ul>
         </nav>
     <?php endif; ?>
-
     <!-- Botón para nuevo usuario -->
-    <?php if ($rol === 'Administrador'): ?>
         <div class="text-center mt-4">
             <button type="button" onclick="window.location.href='nuevo_usuario.php'"
                 class="btn btn-success btn-lg" aria-label="Nuevo usuario">
                 <i class="bi bi-plus-circle"></i> Nuevo usuario
             </button>
         </div>
-    <?php endif; ?>
 </div>
 
 <!-- Footer -->

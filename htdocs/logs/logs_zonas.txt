@@ -77,3 +77,5 @@
 [2025-02-04 20:29:12] Error al acceder a la zona de 'Mantenimiento Subfamilias' por falta de permisos ->martin@sabalicante.com
 [2025-02-04 20:29:12] Error al acceder a la zona de 'Mantenimiento Subfamilias' por falta de permisos ->martin@sabalicante.com
 [2025-02-04 20:29:12] Error al acceder a la zona de 'Mantenimiento Subfamilias' por falta de permisos ->martin@sabalicante.com
+[2025-02-05 23:11:24] Error al acceder a la zona de 'Mantenimiento Subfamilias' por falta de permisos ->
+[2025-02-05 23:15:19] Error al acceder a la zona de 'Mantenimiento Familias' por falta de permisos ->

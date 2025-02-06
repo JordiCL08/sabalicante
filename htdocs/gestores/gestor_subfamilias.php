@@ -58,7 +58,7 @@ class GestorSubFamilias
     }
 
     // Mostrar subfamilias con paginación y ordenación
-    public function mostrar_subfamilias($buscar_subfamilia = '', $ordenar = 'ASC')
+    public function mostrar_subfamilias($buscar = '', $ordenar = 'ASC')
     {
         try {
             // Definir el número de registros por página
@@ -69,10 +69,10 @@ class GestorSubFamilias
             $inicio = ($pagina - 1) * $registros;
 
             // Calcular el total de registros
-            $query_count = "SELECT COUNT(*) as total FROM subfamilias s WHERE s.nombre LIKE :buscar_subfamilia";
+            $query_count = "SELECT COUNT(*) as total FROM subfamilias s WHERE s.nombre LIKE :buscar";
             
             $stmt = $this->pdo->prepare($query_count);
-            $stmt->bindValue(':buscar_subfamilia', '%' . $buscar_subfamilia . '%');
+            $stmt->bindValue(':buscar', '%' . $buscar . '%');
             $stmt->execute();
             $num_total_registros = $stmt->fetchColumn();
 
@@ -84,13 +84,13 @@ class GestorSubFamilias
             SELECT s.*, f.nombre AS nombre_familia
             FROM subfamilias s
             LEFT JOIN familias f ON s.id_familia = f.id_familia
-            WHERE s.nombre LIKE :buscar_subfamilia
+            WHERE s.nombre LIKE :buscar
             ORDER BY s.nombre $ordenar
             LIMIT :inicio, :registros
             ";
             
             $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(':buscar_subfamilia', '%' . $buscar_subfamilia . '%');
+            $stmt->bindValue(':buscar', '%' . $buscar . '%');
             $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
             $stmt->bindValue(':registros', $registros, PDO::PARAM_INT);
             $stmt->execute();
@@ -115,7 +115,6 @@ class GestorSubFamilias
     }
 
     // Borrar una subfamilia por id
-    // En el método de borrar_subfamilia:
     public function borrar_subfamilia($id_subfamilia)
     {
         $query = "DELETE FROM subfamilias WHERE id_subfamilia = :id_subfamilia";
@@ -181,6 +180,7 @@ class GestorSubFamilias
 
         try {
             $stmt = $this->pdo->prepare($query);
+            //Ejecutamos la consulta pasandole los parametros vinculados (id_subfamilia)
             $stmt->execute(['id_subfamilia' => $id_subfamilia]);
             $subfamilia = $stmt->fetch(PDO::FETCH_OBJ);
             if ($subfamilia !== false) {
@@ -214,13 +214,12 @@ class GestorSubFamilias
     public function obtener_subfamilias($idFamilia)
     {
         try {
-            // Consulta para obtener todas las subfamilias activas filtradas por id_familia
+            //Consulta para obtener todas las subfamilias activas filtradas por id_familia
             $query = "SELECT id_subfamilia, id_familia, nombre FROM subfamilias WHERE activo = 1 AND id_familia = :idFamilia"; // Filtrando las subfamilias activas y asociadas a la familia
             $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(':idFamilia', $idFamilia, PDO::PARAM_INT); // Vinculando el id de la familia
             $stmt->execute();
-    
-            // Obtener todas las subfamilias y devolverlas como objetos
+            //Obtener todas las subfamilias y devolverlas como objetos
             return $stmt->fetchAll(PDO::FETCH_OBJ); // Devuelvo los resultados como objetos
         } catch (PDOException $e) {
             throw new Exception('Error al obtener subfamilias: ' . $e->getMessage());

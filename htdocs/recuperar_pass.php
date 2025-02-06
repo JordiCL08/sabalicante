@@ -18,17 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = "El correo electrónico proporcionado no es válido.";
     }
     if (empty($errores)) {
-        $pdo = conectar_db();
-
         try {
+            $pdo = conectar_db();
+            //Consulta para obtener los datos del usuario desde el dni y email
             $query = "SELECT * FROM usuarios WHERE dni = :dni AND email = :email";
+            //preparamos la consulta
             $stmt = $pdo->prepare($query);
+            //Vinculamos los parametros dni y email
             $stmt->bindValue(':dni', $dni);
             $stmt->bindValue(':email', $email);
+            //Ejecutamos la consulta
             $stmt->execute();
-
+            //Obtenemos el resultado (el usuario para cambiar la contraseña)
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
             if ($usuario) {
                 $_SESSION['dni'] = $dni;
                 $_SESSION['email'] = $email;
@@ -61,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Muestra errores -->
             <?php require_once 'config/procesa_errores.php'; ?>
             <div class="container d-flex justify-content-center align-items-center">
-                <!-- AQUI -->
                 <div class="container p-8">
                     <div class="row justify-content-center">
                         <div class="col-md-8">
@@ -94,8 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 </div>
-
-                <!-- AQUI -->
         </main>
     </div>
 </div>

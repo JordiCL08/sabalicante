@@ -68,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Contenido principal -->
         <main class="col-md-9 col-lg-10 p-4 bg-white">
             <div class="container d-flex justify-content-center align-items-center">
-                <!-- AQUI -->
                 <div class="container p-5">
                     <!-- Muestra errores -->
                     <?php require_once 'config/procesa_errores.php'; ?>
@@ -104,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 </div>
-                <!-- AQUI -->
         </main>
     </div>
 </div>
