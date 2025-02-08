@@ -39,31 +39,14 @@ if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
     try {
         // Añadimos el pedido
         $pedido_id = $gestorPedido->agregar_pedido($_SESSION['id'], $total, $forma_pago, $gastos_envio, $recogida_local);
-
         // Añadimos las líneas del pedido
         $gestorPedido->agregar_linea_pedido($pedido_id, $_SESSION['carrito']);
-
-        // Verificar y descontar stock
-        foreach ($_SESSION['carrito'] as $producto) {
-            $stock = $gestorPedido->stock_actual($producto['codigo']);
-            if ($gestorPedido->verificar_stock($producto['codigo'], $producto['cantidad'])) {
-                $gestorPedido->descontar_stock($producto['codigo'], $producto['cantidad']);
-            } else {
-                // Si el stock no es suficiente, revertir la transacción 
-                $pdo->rollBack();
-                $stock_actual = $stock['stock'];
-                escribir_log("Error con el pedido = ID Pedido: $pedido_id realizado por el usuario: " . $_SESSION['usuario'] . " por falta de stock en el producto: " . $producto['nombre'], 'pedidos');
-                $_SESSION['errores'][] = "No hay suficiente stock del producto " . $producto['nombre'] . ". El Stock actual es de: " . $stock_actual;
-                header("Location: ../carrito.php");
-                exit();
-            }
-        }
-
         // Confirmar la transacción
         $pdo->commit();
         $_SESSION['fecha_pedido'] = $fecha_pedido;
         $_SESSION['id_pedido'] = $pedido_id;
-        unset($_SESSION['carrito']);  // Limpiar el carrito
+        //Limpiar el carrito
+        unset($_SESSION['carrito']); 
         vaciar_carrito_base_datos($_SESSION['id'], $pdo);
         escribir_log("ID Pedido: $pedido_id completado con exito por el usuario: " . $_SESSION['usuario'], 'pedidos');
         //Redirigir a la página de confirmación del pedido

@@ -1,22 +1,21 @@
 <?php
 session_start();
 include_once(__DIR__ . '/../gestores/gestor_usuarios.php');
+include_once(__DIR__ . '/../gestores/gestor_pedidos.php');
 include_once(__DIR__ . '/../config/funciones.php');
 include_once(__DIR__ . '/../config/conectar_db.php');
 require __DIR__ . "/autoload.php";
-
 // Clave secreta de Stripe
 $stripe_clave_privada = 'sk_test_51QiKchJtRHNFpLrqrlz8wUaTzQmtmdRzfwviJyQxVVBSmVHmfgRgPR7vA3lwcWXZsTP3JbRF3SjGYM2rzW81f0S100fyf207Zt';
 \Stripe\Stripe::setApiKey($stripe_clave_privada);
-
-//Carrito desde la sesión
-$carrito = $_SESSION['carrito'];
-
-//INTRODUCIMOS LOS DATOS DE ENVIO/FACTURACION QUE SACAMOS DEL FORMULARIO DE PAGO(EN CASO DE QUE NO TENGA DATOS DE ENVIO O SE CAMBIEN)
+//Conexión
 $pdo = conectar_db();
 $gestorUsuarios = new GestorUsuarios($pdo);
+$gestorPedido = new GestorPedidos($pdo);
 $ID_usuario = $_SESSION['id'];
 $usuarioDetalles = $gestorUsuarios->obtener_usuario_por_id($ID_usuario);
+//INTRODUCIMOS LOS DATOS DE ENVIO/FACTURACION QUE SACAMOS DEL FORMULARIO DE PAGO(EN CASO DE QUE NO TENGA DATOS DE ENVIO O SE CAMBIEN)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //datos de envio
     if ($_POST['direccion']) {
@@ -37,6 +36,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gastos_envio = $_POST['gastos_envio'];
     $_SESSION['forma_pago'] = $forma_pago;
     $_SESSION['gastos_envio'] = $gastos_envio;
+
+    //Iniciamos la transaccion
+    $pdo->beginTransaction();
+    //Carrito desde la sesión
+    $carrito = $_SESSION['carrito'];
+    // Verificar y descontar stock
+    foreach ($carrito as $producto) {
+        $stock = $gestorPedido->stock_actual($producto['codigo']);
+        if ($gestorPedido->verificar_stock($producto['codigo'], $producto['cantidad'])) {
+            $gestorPedido->descontar_stock($producto['codigo'], $producto['cantidad']);
+        } else {
+            // Si el stock no es suficiente, revertir la transacción 
+            $pdo->rollBack();
+            $stock_actual = $stock['stock'];
+            escribir_log("Error con el pedido: Realizado por el usuario: " . $_SESSION['usuario'] . " por falta de stock en el producto: " . $producto['nombre'], 'pedidos');
+            $_SESSION['errores'][] = "No hay suficiente stock del producto " . $producto['nombre'] . ". El Stock actual es de: " . $stock_actual;
+            header("Location: ../carrito.php");
+            exit();
+        }
+    }
     //Verifica que el total esté en la sesión
     if (isset($_SESSION['total']) && $_SESSION['total'] > 0) {
         $line_items = []; //Array para la linea de productos

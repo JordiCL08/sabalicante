@@ -56,3 +56,4 @@
 [2025-02-06 20:03:24] ID Pedido: 48 completado con exito por el usuario: valida@valida.es
 [2025-02-06 20:03:39] ID Pedido: 49 completado con exito por el usuario: valida@valida.es
 [2025-02-06 20:51:13] Estado del pedido con ID: 49 ha sido actualizado por el usuario: Jordicodeviladl@gmail.com al estado: Enviado.
+[2025-02-06 22:07:27] ID Pedido: 50 completado con exito por el usuario: anavegaca@hotmail.com

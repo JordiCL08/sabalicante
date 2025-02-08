@@ -19,3 +19,5 @@
 [2025-02-04 20:39:53] El usuario j@j.com con DNI: 67841771M ha sido editado por el usuario j@j.com
 [2025-02-04 21:01:48] El usuario Jordi creado correctamente por el usuario: Jordi
 [2025-02-06 19:43:48] El usuario prueba tras val creado correctamente por el usuario: prueba tras val
+[2025-02-06 21:59:23] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido activado por el usuario Jordicodeviladl@gmail.com
+[2025-02-06 21:59:23] El usuario anavegaca@hotmail.com con DNI: 48673889r ha sido editado por el usuario Jordicodeviladl@gmail.com
