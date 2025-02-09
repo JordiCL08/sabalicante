@@ -39,82 +39,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //Iniciamos la transaccion
     $pdo->beginTransaction();
-    //Carrito desde la sesión
-    $carrito = $_SESSION['carrito'];
-    // Verificar y descontar stock
-    foreach ($carrito as $producto) {
-        $stock = $gestorPedido->stock_actual($producto['codigo']);
-        if ($gestorPedido->verificar_stock($producto['codigo'], $producto['cantidad'])) {
-            $gestorPedido->descontar_stock($producto['codigo'], $producto['cantidad']);
-        } else {
-            // Si el stock no es suficiente, revertir la transacción 
-            $pdo->rollBack();
-            $stock_actual = $stock['stock'];
-            escribir_log("Error con el pedido: Realizado por el usuario: " . $_SESSION['usuario'] . " por falta de stock en el producto: " . $producto['nombre'], 'pedidos');
-            $_SESSION['errores'][] = "No hay suficiente stock del producto " . $producto['nombre'] . ". El Stock actual es de: " . $stock_actual;
-            header("Location: ../carrito.php");
-            exit();
-        }
-    }
-    //Verifica que el total esté en la sesión
-    if (isset($_SESSION['total']) && $_SESSION['total'] > 0) {
-        $line_items = []; //Array para la linea de productos
-
+    try {
+        //Carrito desde la sesión
+        $carrito = $_SESSION['carrito'];
+        // Verificar y descontar stock
         foreach ($carrito as $producto) {
-            //Pasamos el precio de cada producto en centimos para que lo pueda leer stripe
-            $precio_final_en_centimos = round($producto['precio_final'] * 100);
-            //Añadimos productos
-            $line_items[] = [
-                'quantity' => $producto['cantidad'],
-                'price_data' => [
-                    'currency' => 'eur',
-                    'unit_amount' => $precio_final_en_centimos,
-                    'product_data' => [
-                        'name' => $producto['nombre'],
-                    ],
-                ],
-            ];
-        }
-        //Mostrar en Stripe los gastos de envio en caso de que los haya 
-        if ($_SESSION['gastos_envio'] > 0) {
-            $gastos_envio_en_centimos = round($_SESSION['gastos_envio'] * 100);
-            $line_items[] = [
-                'quantity' => 1,
-                'price_data' => [
-                    'currency' => 'eur',
-                    'unit_amount' => $gastos_envio_en_centimos,
-                    'product_data' => [
-                        'name' => 'Gastos de Envío',
-                    ],
-                ],
-            ];
-        }
-
-        if ($forma_pago === 'tarjeta') {
-            try {
-                // Crear la sesión de Checkout de Stripe
-                $checkout_session = \Stripe\Checkout\Session::create([
-                    'payment_method_types' => ['card', 'paypal'],
-                    'line_items' => $line_items, //Productos y cantidades
-                    'mode' => 'payment',
-                    'success_url' => 'https://sabalicante.wuaze.com/carrito/pedido_completado.php',
-                    'cancel_url' => 'https://sabalicante.wuaze.com/carrito.php',
-                ]);
-                escribir_log("El pago del pedido ha pasado por stripe", 'stripe');
-                //Redirigir al cliente al checkout de Stripe
-                header("Location: " . $checkout_session->url);
-                exit;
-            } catch (\Stripe\Exception\ApiErrorException $e) {
-                escribir_log("El pago del pedido no ha pasado por stripe", 'stripe');
-                echo "Error de API de Stripe: " . $e->getMessage();
-            } catch (Exception $e) {
-                escribir_log("Error general de stripe", 'stripe');
-                echo "Error general: " . $e->getMessage();
+            $stock = $gestorPedido->stock_actual($producto['codigo']);
+            if ($gestorPedido->verificar_stock($producto['codigo'], $producto['cantidad'])) {
+                $gestorPedido->descontar_stock($producto['codigo'], $producto['cantidad']);
+            } else {
+                // Si el stock no es suficiente, revertir la transacción 
+                $pdo->rollBack();
+                $stock_actual = $stock['stock'];
+                escribir_log("Error con el pedido: Realizado por el usuario: " . $_SESSION['usuario'] . " por falta de stock en el producto: " . $producto['nombre'], 'pedidos');
+                $_SESSION['errores'][] = "No hay suficiente stock del producto " . $producto['nombre'] . ". El Stock actual es de: " . $stock_actual;
+                header("Location: ../carrito.php");
+                exit();
             }
-        } else {
-            //Cuando el pago no es en tarjeta o paypal
-            header("Location: ../carrito/pedido_completado.php");
-            exit;
         }
+        $pdo->commit();
+        //Verifica que el total esté en la sesión
+        if (isset($_SESSION['total']) && $_SESSION['total'] > 0) {
+            $line_items = []; //Array para la linea de productos
+
+            foreach ($carrito as $producto) {
+                //Pasamos el precio de cada producto en centimos para que lo pueda leer stripe
+                $precio_final_en_centimos = round($producto['precio_final'] * 100);
+                //Añadimos productos
+                $line_items[] = [
+                    'quantity' => $producto['cantidad'],
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'unit_amount' => $precio_final_en_centimos,
+                        'product_data' => [
+                            'name' => $producto['nombre'],
+                        ],
+                    ],
+                ];
+            }
+            //Mostrar en Stripe los gastos de envio en caso de que los haya 
+            if ($_SESSION['gastos_envio'] > 0) {
+                $gastos_envio_en_centimos = round($_SESSION['gastos_envio'] * 100);
+                $line_items[] = [
+                    'quantity' => 1,
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'unit_amount' => $gastos_envio_en_centimos,
+                        'product_data' => [
+                            'name' => 'Gastos de Envío',
+                        ],
+                    ],
+                ];
+            }
+
+            if ($forma_pago === 'tarjeta') {
+                try {
+                    // Crear la sesión de Checkout de Stripe
+                    $checkout_session = \Stripe\Checkout\Session::create([
+                        'payment_method_types' => ['card', 'paypal'],
+                        'line_items' => $line_items, //Productos y cantidades
+                        'mode' => 'payment',
+                        'success_url' => 'https://sabalicante.wuaze.com/carrito/pedido_completado.php',
+                        'cancel_url' => 'https://sabalicante.wuaze.com/carrito.php',
+                    ]);
+                    escribir_log("El pago del pedido ha pasado por stripe", 'stripe');
+                    //Redirigir al cliente al checkout de Stripe
+                    header("Location: " . $checkout_session->url);
+                    exit;
+                } catch (\Stripe\Exception\ApiErrorException $e) {
+                    escribir_log("El pago del pedido no ha pasado por stripe", 'stripe');
+                    echo "Error de API de Stripe: " . $e->getMessage();
+                } catch (Exception $e) {
+                    escribir_log("Error general de stripe", 'stripe');
+                    echo "Error general: " . $e->getMessage();
+                }
+            } else {
+                //Cuando el pago no es en tarjeta o paypal
+                header("Location: ../carrito/pedido_completado.php");
+                exit;
+            }
+        }
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        escribir_log("Error con el pedido = ID Pedido: $pedido_id realizado por el usuario: " . $_SESSION['usuario'], 'pedidos');
+        $_SESSION['errores'][] =  "Error al realizar el pedido. Por favor, intente nuevamente más tarde.";
     }
 }

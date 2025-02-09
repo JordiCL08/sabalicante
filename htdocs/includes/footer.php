@@ -1,4 +1,3 @@
-
 <!--DIV FINALES ASIDE -->
 <div class="_linea-sup"></div>
 <footer class="bg-light text-dark text-center py-4">
@@ -13,12 +12,13 @@
         </a>
     </div>
 </footer>
-
-<!-- Bootstrap 5 JS (con Popper.js) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
 <script>
     document.getElementById("currentYear").textContent = new Date().getFullYear();
 </script>
+
+<!-- Bootstrap 5 JS (con Popper.js) -->
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

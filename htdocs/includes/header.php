@@ -30,27 +30,15 @@ $pagina = (int) ($_GET['pagina'] ?? 1);
     <title>Sabores Alicante</title>
     <meta name="description" content="Web sabores Alicante">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="estilos/styles.css" rel="stylesheet"> <!-- ESTILOS PROPIOS -->
+    <link href="/estilos/styles.css" rel="stylesheet"> <!-- ESTILOS PROPIOS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- BOOSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- ICONOS BOOSTRAP -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/estilos/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/estilos/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/estilos/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/estilos/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/estilos/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/estilos/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/estilos/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/estilos/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/estilos/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/estilos/favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/estilos/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/estilos/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/estilos/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/estilos/favicon/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/estilos/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-
     <!-- DATATABLES-->
     <link href="DataTables/datatables.min.css" rel="stylesheet">
     <script src="DataTables/datatables.min.js"></script>
@@ -64,10 +52,10 @@ $pagina = (int) ($_GET['pagina'] ?? 1);
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="index.php">Panel de Gestión</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#hamburguesa_menu" aria-controls="hamburguesa_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="collapse navbar-collapse" id="hamburguesa_menu">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <!-- Gestión de Usuarios -->
 
@@ -124,11 +112,11 @@ $pagina = (int) ($_GET['pagina'] ?? 1);
                     <a href="index.php" class="logo-btn d-block mx-auto">
                         <img src="estilos/logo.png" alt="Logo Sabores Alicante" class="logo-navbar">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#hamburgesa_menu" aria-controls="hamburgesa_menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#hamburguesa_menu" aria-controls="hamburguesa_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="hamburgesa_menu">
+                    <div class="collapse navbar-collapse" id="hamburguesa_menu">
                         <!-- Menú a la izquierda -->
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -152,7 +140,7 @@ $pagina = (int) ($_GET['pagina'] ?? 1);
                         </ul>
 
                         <!-- Buscador-->
-                        <form class="d-flex mx-auto mb-2" role="search" method="get" style="max-width: 800px; width: 100%;">
+                        <form class="d-flex mx-auto mb-2" role="search" method="get" action="index.php" style="max-width: 800px; width: 100%;">
                             <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar" name="buscar" value="">
                             <button class="btn btn-outline-primary" type="submit">Buscar</button>
                         </form>
