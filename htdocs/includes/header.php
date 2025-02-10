@@ -30,7 +30,7 @@ $pagina = (int) ($_GET['pagina'] ?? 1);
     <title>Sabores Alicante</title>
     <meta name="description" content="Web sabores Alicante">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/estilos/styles.css" rel="stylesheet"> <!-- ESTILOS PROPIOS -->
+    <link href="estilos/styles.css" rel="stylesheet"> <!-- ESTILOS PROPIOS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- BOOSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- ICONOS BOOSTRAP -->
     <link rel="icon" type="image/png" sizes="32x32" href="/estilos/favicon/favicon-32x32.png">
